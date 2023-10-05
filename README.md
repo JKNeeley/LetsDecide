@@ -1,2 +1,3 @@
 # LetsDecide
-MU Capstone Project
+
+MU Capstone Projects
