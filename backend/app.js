@@ -18,7 +18,8 @@ mongoose.connect('mongodb+srv://SURF_Webmaster:2MQjduCM4U9q7eGx@mizzousurf.l9qio
 
 const voteModel = mongoose.model('Form', {});
 const questionModel = mongoose.model('Question', {});
-
+const responseModel = mongoose.model('Response', {});
+const accessModel = mongoose.model('Access', {});
 
 
 
@@ -45,13 +46,6 @@ app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 
 
 
-
-
-
-//pages: Home Page, Create Ballot, Start Election, Cast Vote, Election Results
-//This is all on page 16 on Cap 2 Starting Doc
-
-
 //Home
 app.post('/', (req, res) => {
   if(req.body.email)
@@ -73,9 +67,12 @@ app.post('/createForm', (req, res) => {
       Description: req.body.description,
       Type: req.body.type,
       State: req.body.state,
-      Time_Close: req.body.time_close,
+      Time_Close: req.body.time_close,//date
       Draft_Name: req.body.draft_name,
-      Draft_Code: req.body.draft_code
+      Draft_Code: req.body.draft_code,
+      Questions: req.body.questions,//array
+      Responses: req.body.responses,//array
+      Access: req.body.responses//array
     });
     finishedForm.save()
     .then(() => {
@@ -84,6 +81,7 @@ app.post('/createForm', (req, res) => {
     .catch((error) => {
       console.log('Error saving data: ', error);
     })
+    res.redirect('/');
 });
 
 
@@ -91,16 +89,22 @@ app.post('/createForm', (req, res) => {
 app.post('/createBallot', (req, res) => {
   var question_count = req.body.question_count;
   var i = 0;
+  /*
+  Passing the questions through post request
+  Each element from the post request will be an array, this way we can pass in as many questions as we want
+  *Options will be a 2d array
+  */
+
   while(i<question_count)
   {
     let question = new questionModel(
       {
-        ID: (req.body.id + "" + i),
-        Parent_Form_ID: (req.body.parent_form_id + "" + i),
-        Type: (req.body.type + "" + i),
-        Description: (req.body.description + "" + i),
+        ID: req.body.id[i],
+        Parent_Form_ID: req.body.parent_form_id[i],
+        Type: req.body.type[i],
+        Description: req.body.description[i],
         Show_Top: null,
-        Options: [req.body.question1 + "_" + i, req.body.question2 + "_" + i, req.body.question3 + "_" + i, req.body.question4 + "_" + i]
+        Options: req.body.options[i]//array
       });
     questionModel.save()
     .then(() => {
@@ -112,6 +116,30 @@ app.post('/createBallot', (req, res) => {
     i++;
   }
 });
+
+
+app.post('/vote', (req, res) => {
+  let response = new responseModel(
+    {
+      ID: req.body.id,
+      Parent_Form_ID: req.body.parent_form_id,
+      Answers: req.body.answers //array
+    });
+    responseModel.save()
+    .then(() => {
+      console.log('Data saved')
+    })
+    .catch((error) => {
+      console.log('Error saving data: ', error);
+    })
+});
+
+
+
+
+
+
+
 
 
 module.exports = app;
