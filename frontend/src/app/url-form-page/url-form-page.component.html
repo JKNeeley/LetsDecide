@@ -1,1 +1,71 @@
-<p>url-form-page works!</p>
+<!-- url-form-page.component.html -->
+<header>
+    <nav>
+      <div class="navbar">
+        <div class="brand-name">Let's Decide</div>
+      </div>
+    </nav>
+  </header>
+  <main class="landing-page">
+    <div class="center-content">
+      <h1>Create your URL Voting Form.</h1>
+      <p>Please separate multiple responses with a comma for easy parsing!</p>
+      <div>
+        <form>
+            <div>
+              <label>
+                Title:
+                <input formControlName="title" placeholder="Title">
+              </label>
+            </div>
+            <br/>
+            <div>
+              <label>
+                Description:
+                <input formControlName="description" placeholder="Description">
+              </label>
+            </div>
+            <br/>
+            <!-- type defaults to private at this time
+            <div>
+              <label>
+                Type: (no affect at this time)
+                <input formControlName="type" placeholder="0 is local, 1 is public, 2 is private">
+              </label>
+            </div>
+            <br/> -->
+            <div>
+              <label>
+                Emails of voters:
+                <input formControlName="name" placeholder="Emails">
+              </label>
+            </div>
+            <br/>
+            <div>
+              <label>
+                Time votes are due:
+                <input formControlName="time" placeholder="Time">
+              </label>
+            </div>
+            <br/>
+            <div>
+              <label>
+                Voting question:
+                <input formControlName="email" placeholder="Question">
+              </label>
+            </div>
+            <br/>
+            <div>
+              <label>
+                Voting answer(s):
+                <input formControlName="message" placeholder="Answers">
+              </label>
+            </div>
+            <br/>
+            <div class="button-container">
+                <button class="button" type="submit">Start Vote</button>
+            </div>
+          </form>
+      </div>
+    </div>
+  </main>
