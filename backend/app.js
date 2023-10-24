@@ -118,6 +118,7 @@ app.post('/createBallot', (req, res) => {
 });
 
 
+//where the voters send their response
 app.post('/vote', (req, res) => {
   let response = new responseModel(
     {
@@ -134,7 +135,23 @@ app.post('/vote', (req, res) => {
     })
 });
 
-
+app.post('/access', (req, res) => {
+  let access = new accessModel(
+    {
+      ID: req.body.id,
+      Parent_Form_ID: req.body.parent_form_id,
+      Email: req.body.email,
+      Passcode: req.body.passcode,
+      Voted: req.body.voted
+    });
+    accessModel.save()
+    .then(() => {
+      console.log('Data saved')
+    })
+    .catch((error) => {
+      console.log('Error saving data: ', error);
+    })
+});
 
 
 
