@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express()
-const port = 3000
+const port = 3001
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 
@@ -8,7 +8,7 @@ const bodyParser = require('body-parser')
 // Define models here
 
 
-mongoose.connect('mongodb+srv://SURF_Webmaster:2MQjduCM4U9q7eGx@mizzousurf.l9qioaf.mongodb.net/SURF?retryWrites=true&w=majority')
+mongoose.connect('mongodb+srv://mel:testing12@cluster0.5cmaqsn.mongodb.net/')
   .then(()=>{
     console.log('Connected to database')
   })
@@ -20,9 +20,6 @@ const voteModel = mongoose.model('Form', {});
 const questionModel = mongoose.model('Question', {});
 const responseModel = mongoose.model('Response', {});
 const accessModel = mongoose.model('Access', {});
-
-
-
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:false}))

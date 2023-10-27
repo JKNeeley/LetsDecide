@@ -1,32 +1,66 @@
 pipeline {
-    agent any // You can specify a specific agent here
+    agent any 
     
     stages {
-        stage('Build') {
+        stage('Checkout') {
             steps {
-                sh 'echo "Building..."'
-                // Additional build steps can go here
+                sh 'echo "Checking out..."'
+                checkout scm
             }
         }
-        
-        stage('Test') {
+        stage('Backend Build and Test') {
             steps {
-                sh 'echo "Testing..."'
-                // Additional test steps can go here
+                dir('backend') {
+                    // Change to the backend directory
+                    sh 'echo "Building Backend..."'
+                    sh 'npm install'
+                    sh 'echo "Testing Backend..."'
+                    sh 'npm test' 
+                }
+            }
+        }
+
+        stage('Frontend Build and Test') {
+            steps {
+                dir('frontend') {
+                    // Change to the frontend directory
+                    sh 'echo "Building Frontend..."'
+                    sh 'npm install'
+                    sh 'echo "Testing Frontend..."'
+                    sh 'npm test' 
+                }
+            }
+        }
+
+        stage('Database Migration') {
+            steps {
+                sh 'echo "Migrating Database..."'
+                // maybe use 'mongorestore' ?
             }
         }
         
         stage('Deploy') {
             steps {
                 sh 'echo "Deploying..."'
-                // Additional deployment steps can go here
+
+                // Define EC2 instance details
+                def ec2Instance = 'your-ec2-instance-ip' // or hostname
+                def ec2User = 'ec2-user' // or the SSH user you use to connect to the instance
+                def sshKey = 'your-ssh-key' // the private key file to use for authentication
+                
+                def appDir = '/path/to/your/app/directory'
+                sh "scp -i ${sshKey} -r your-app-directory/* ${ec2User}@${ec2Instance}:${appDir}"
+                
+                sh "ssh -i ${sshKey} ${ec2User}@${ec2Instance} 'cd ${appDir} && npm install'"
+                sh "ssh -i ${sshKey} ${ec2User}@${ec2Instance} 'cd ${appDir} && pm2 restart your-app.js'"
+
             }
         }
     }
     
     post {
         success {
-            sh 'echo "Pipeline succeeded!"'
+            sh 'echo "Pipeline succeeded :)"'
         }
         failure {
             sh 'echo "Pipeline failed :("'
