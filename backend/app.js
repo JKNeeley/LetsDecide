@@ -5,10 +5,7 @@ const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 
 
-// Define models here
-
-
-mongoose.connect('mongodb+srv://mel:testing12@cluster0.5cmaqsn.mongodb.net/')
+mongoose.connect('mongodb+srv://admin:oum6ZdhsYIFYEyuR@cluster0.5cmaqsn.mongodb.net/letsdecide?retryWrites=true&w=majority')
   .then(()=>{
     console.log('Connected to database')
   })
@@ -42,7 +39,7 @@ app.get('/', (req, res) => res.send('Hello World!'))
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 
 
-
+/* Not sure what this is actually supposed to do
 //Home
 app.post('/', (req, res) => {
   if(req.body.email)
@@ -54,10 +51,13 @@ app.post('/', (req, res) => {
     console.log("Login");
   }
 });
+*/
+
+// Define models here //
 
 //Create Vote Form
-app.post('/createForm', (req, res) => {
-  const finishedForm = new voteModel(
+app.post('/api/forms', (req, res) => {
+  const finishedForm = new formModel(
     {
       ID: req.body.id,
       Title: req.body.title,
@@ -81,9 +81,18 @@ app.post('/createForm', (req, res) => {
     res.redirect('/');
 });
 
+app.get('/api/forms',(req,res,next)=>{
+  formModel.find().then(documents=>{
+    res.status(200).json({
+      message: "This is fetched data",
+      photos: documents
+    })
+  })
+})
+
 
 //Create Ballot
-app.post('/createBallot', (req, res) => {
+app.post('/api/questions', (req, res) => {
   var question_count = req.body.question_count;
   var i = 0;
   /*
@@ -116,7 +125,7 @@ app.post('/createBallot', (req, res) => {
 
 
 //where the voters send their response
-app.post('/vote', (req, res) => {
+app.post('/api/responses', (req, res) => {
   let response = new responseModel(
     {
       ID: req.body.id,
@@ -132,7 +141,7 @@ app.post('/vote', (req, res) => {
     })
 });
 
-app.post('/access', (req, res) => {
+app.post('/api/access', (req, res) => {
   let access = new accessModel(
     {
       ID: req.body.id,
@@ -149,11 +158,6 @@ app.post('/access', (req, res) => {
       console.log('Error saving data: ', error);
     })
 });
-
-
-
-
-
 
 
 module.exports = app;
