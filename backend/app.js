@@ -59,7 +59,7 @@ app.post('/', (req, res) => {
 });
 
 //Create Vote Form
-app.post('/createForm', (req, res) => {
+app.post('api/forms', (req, res) => {
   const finishedForm = new voteModel(
     {
       ID: req.body.id,
@@ -86,7 +86,7 @@ app.post('/createForm', (req, res) => {
 
 
 //Create Ballot
-app.post('/createBallot', (req, res) => {
+app.post('api/ballots', (req, res) => {
   var question_count = req.body.question_count;
   var i = 0;
   /*
@@ -119,7 +119,7 @@ app.post('/createBallot', (req, res) => {
 
 
 //where the voters send their response
-app.post('/vote', (req, res) => {
+app.post('api/votes', (req, res) => {
   let response = new responseModel(
     {
       ID: req.body.id,
@@ -135,7 +135,7 @@ app.post('/vote', (req, res) => {
     })
 });
 
-app.post('/access', (req, res) => {
+app.post('api/access', (req, res) => {
   let access = new accessModel(
     {
       ID: req.body.id,
