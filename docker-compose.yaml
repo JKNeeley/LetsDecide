@@ -1,0 +1,13 @@
+version: '3.9'
+
+services:
+  angular:
+    build: ./frontend
+    ports:
+      - 4200:4200
+  node:
+    build: ./backend
+    ports:
+      - 3001:3001
+    environment:
+      MONGO_URL: mongodb+srv://mel:testing12@cluster0.5cmaqsn.mongodb.net/
