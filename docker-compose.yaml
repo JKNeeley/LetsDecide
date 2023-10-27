@@ -10,4 +10,4 @@ services:
     ports:
       - 3001:3001
     environment:
-      MONGO_URL: mongodb+srv://mel:testing12@cluster0.5cmaqsn.mongodb.net/
+      MONGO_URL: mongodb+srv://admin:oum6ZdhsYIFYEyuR@cluster0.5cmaqsn.mongodb.net/

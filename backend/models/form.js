@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const formSchema = new Schema({
+const formSchema = new mongoose.Schema({
   Title:        String,
   Description:  String,
   Type:         Number,
@@ -13,4 +13,4 @@ const formSchema = new Schema({
   Access_ID:     {type: String}  // not required; only if private
 });
 
-module.exports = mongoose.model('Form',formSchema)
+module.exports = mongoose.model('form',formSchema)
