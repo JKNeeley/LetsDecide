@@ -85,7 +85,7 @@ app.get('/api/forms',(req,res,next)=>{
   formModel.find().then(documents=>{
     res.status(200).json({
       message: "This is fetched data",
-      photos: documents
+      forms: documents
     })
   })
 })
