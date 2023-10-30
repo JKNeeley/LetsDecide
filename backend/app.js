@@ -13,10 +13,11 @@ mongoose.connect('mongodb+srv://admin:oum6ZdhsYIFYEyuR@cluster0.5cmaqsn.mongodb.
     console.log('connection error')
 })
 
-const voteModel = mongoose.model('Form', {});
-const questionModel = mongoose.model('Question', {});
-const responseModel = mongoose.model('Response', {});
-const accessModel = mongoose.model('Access', {});
+
+const formModel = require('./models/form')
+const questionModel = equire('./models/question')
+const responseModel = require('./models/response')
+const accessModel = require('./models/access')
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:false}))
