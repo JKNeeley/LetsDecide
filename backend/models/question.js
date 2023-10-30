@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const questionSchema = new Schema({
+const questionSchema = new Mongoose.Schema({
   Questions: [{
     Parent_Form_ID: String,
     Type: Number,
