@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const accessSchema = new Schema({
+const accessSchema = new mongoose.Schema({
   Access: [{
     Parent_Form_ID: String,
     Email: String,

@@ -15,7 +15,7 @@ mongoose.connect('mongodb+srv://admin:oum6ZdhsYIFYEyuR@cluster0.5cmaqsn.mongodb.
 
 
 const formModel = require('./models/form')
-const questionModel = equire('./models/question')
+const questionModel = require('./models/question')
 const responseModel = require('./models/response')
 const accessModel = require('./models/access')
 
