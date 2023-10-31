@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express()
-const port = 3001
+const port = 3000
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 
@@ -37,7 +37,7 @@ app.use((req, res, next)=>{
 
 // Define routes here
 app.get('/', (req, res) => res.send('Hello World!'))
-app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+//app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 
 
 /* Not sure what this is actually supposed to do
