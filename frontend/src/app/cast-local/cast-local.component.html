@@ -1,0 +1,21 @@
+<main class="form-page">
+    <div>
+        <h1>(Vote Title)</h1>
+        <p>(Vote Description)</p>
+        <form>
+            <div class="form-container">
+                <p>(Vote Question)</p>
+                <label for="choice">Your Choice: </label>
+                <input type="text" id="choice" [(ngModel)]="choice" name="choice" required>
+            </div>
+            <br>
+            <br>
+            <div>
+                <button class="button" (click)="navigateToCastLocal()">Vote</button>
+                <br>
+
+                <button class="button" (click)="navigateToHomePage()">End</button>
+            </div>
+            </form>
+    </div>
+</main>

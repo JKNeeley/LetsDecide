@@ -1,0 +1,24 @@
+  <main class="home-page">
+    <div class="center-content">
+      <h1>Have a successful voting session!</h1>
+      <div>
+        <button class="button" (click)="navigateToCreateVotingForm()">Create Voting Form</button>
+      </div>
+      <br>
+      <div>
+        <button class="button" (click)="showEditCredentialsPopup = true">Edit Drafted Voting Form</button>
+        <!-- <button class="button" (click)="navigateToEditVotingForm()">Edit Drafted Voting Form</button> -->
+        <app-edit-credentials-popup *ngIf="showEditCredentialsPopup"></app-edit-credentials-popup>
+      </div>
+      <br>
+      <div>
+        <button class="button" (click)="navigateToCreateLocalVote()">Create Local Vote</button>
+      </div>
+      <br>
+      <div>
+        <button class="button" (click)="showVoteCredentialsPopup = true">Cast Vote</button>
+        <!-- <button class="button" (click)="navigateToCastVote()">Cast Vote</button> -->
+        <app-vote-credentials-popup *ngIf="showVoteCredentialsPopup"></app-vote-credentials-popup>
+      </div>
+    </div>
+  </main>
