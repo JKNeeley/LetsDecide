@@ -1,0 +1,45 @@
+<main class="form-page">
+    <div>
+        <h1>What are you voting on?</h1>
+        <form>
+            <h2>Step 1: Create your voting form.</h2>
+            <div class="form-container">
+                <div>
+                    <label for="title">Title:</label>
+                    <br>
+                    <input type="text" id="title" [(ngModel)]="title" name="title" required>
+                </div>
+                <br>
+                <div>
+                    <label for="description">Description:</label>
+                    <br>
+                    <input type="text" id="description" [(ngModel)]="description" name="description" required>
+                </div>
+                <br>
+                <div>
+                    <label for="voters">Voters:</label>
+                    <br>
+                    <input type="text" id="voters" [(ngModel)]="voters" name="voters" required>
+                </div>
+                <br>
+                <div>
+                    <label for="question">Question:</label>
+                    <br>
+                    <input type="text" id="question" [(ngModel)]="question" name="question" required>
+                </div>
+                <br>
+                <div>
+                    <label for="answers">Answers (separate with a comma):</label>
+                    <br>
+                    <input type="text" id="answers" [(ngModel)]="answers" name="answers" required>
+                </div>
+            </div>
+            <br>
+            <br>
+            <div>
+                <h2>Step 2: Start voting!</h2>
+                <button class="button" (click)="navigateToCastVote(4)">Start</button>
+            </div>
+            </form>
+    </div>
+</main>
