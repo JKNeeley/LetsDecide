@@ -5,7 +5,7 @@ const path = require('path');
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 
-app.use(express.static(path.join(__dirname, '../frontend')));
+app.use(express.static(path.join(__dirname, '../frontend/src')));
 
 
 mongoose.connect('mongodb+srv://admin:oum6ZdhsYIFYEyuR@cluster0.5cmaqsn.mongodb.net/letsdecide?retryWrites=true&w=majority')
