@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Form Submission</title>
+</head>
+<body>
+  <h1>Submit Form</h1>
+  <form action="/api/forms" method="POST">
+    <% for (let i = 1; i <= 10; i++) { %>
+      <input type="text" name="questions[]" placeholder="Question <%= i %>">
+    <% } %>
+    <!-- Add more inputs with the same name="questions[]" for additional questions -->
+    <button type="submit">Submit</button>
+  </form>
+</body>
+</html>

@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express()
 const port = 3000
+const path = require('path');
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 
@@ -19,6 +20,12 @@ const questionModel = require('./models/question')
 const responseModel = require('./models/response')
 const accessModel = require('./models/access')
 
+app.set('view engine', 'ejs'); // Set EJS as the view engine
+app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
+app.set('views', path.join(__dirname, '..', 'frontend', 'src', 'app')); // Set the views directory to the 'frontend/src/app' directory
+
+
+app.use(express.static(path.join(__dirname, '../frontend')));
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:false}))
 app.use((req, res, next)=>{
@@ -34,33 +41,20 @@ app.use((req, res, next)=>{
   next();
 })
 
+app.get('/src/app/temp-save', (req, res) => {
+  //console.log("Loaded");
+  res.render('temp-save'); // Assuming 'temp-save.ejs' is your EJS template file
+});
+
 
 // Define routes here
 app.get('/', (req, res) => res.send('Hello World!'))
-//app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 
-
-/* Not sure what this is actually supposed to do
-//Home
-app.post('/', (req, res) => {
-  if(req.body.email)
-  {
-    console.log(req.body.email);//display current account logged in
-  }
-  else
-  {
-    console.log("Login");
-  }
-});
-*/
-
-// Define models here //
 
 //Create Vote Form
 app.post('/api/forms', (req, res) => {
   const finishedForm = new formModel(
     {
-      ID: req.body.id,
       Title: req.body.title,
       Description: req.body.description,
       Type: req.body.type,
