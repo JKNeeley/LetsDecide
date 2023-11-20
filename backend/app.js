@@ -1,8 +1,11 @@
 const express = require('express')
 const app = express()
-const port = 3002
+const port = 3000
+const path = require('path');
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
+
+app.use(express.static(path.join(__dirname, '../frontend')));
 
 
 mongoose.connect('mongodb+srv://admin:oum6ZdhsYIFYEyuR@cluster0.5cmaqsn.mongodb.net/letsdecide?retryWrites=true&w=majority')
@@ -13,11 +16,11 @@ mongoose.connect('mongodb+srv://admin:oum6ZdhsYIFYEyuR@cluster0.5cmaqsn.mongodb.
     console.log('connection error')
 })
 
+
 const formModel = require('./models/form')
 const questionModel = require('./models/question')
 const responseModel = require('./models/response')
 const accessModel = require('./models/access')
-
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:false}))
@@ -37,59 +40,34 @@ app.use((req, res, next)=>{
 
 // Define routes here
 app.get('/', (req, res) => res.send('Hello World!'))
-app.listen(port, () => console.log(`Example app listening on port ${port}!`))
-
-
-/* Not sure what this is actually supposed to do
-//Home
-app.post('/', (req, res) => {
-  if(req.body.email)
-  {
-    console.log(req.body.email);//display current account logged in
-  }
-  else
-  {
-    console.log("Login");
-  }
-});
-*/
-
-// Define models here //
+//app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 
 //Create Vote Form
 app.post('/api/forms', (req, res) => {
-  const finishedForm = new formModel(
-    {
-      ID: req.body.id,
-      Title: req.body.title,
-      Description: req.body.description,
-      Type: req.body.type,
-      State: req.body.state,
-      Time_Close: req.body.time_close,//date
-      Draft_Name: req.body.draft_name,
-      Draft_Code: req.body.draft_code,
-      Questions: req.body.questions,//array
-      Responses: req.body.responses,//array
-      Access: req.body.responses//array
-    });
-    finishedForm.save()
-    .then(() => {
-      console.log('Data saved')
-    })
-    .catch((error) => {
-      console.log('Error saving data: ', error);
-    })
-    res.redirect('/');
+
+const finishedForm = new formModel({
+    Title: req.body.title,
+    Description: req.body.description,
+    Type: req.body.type,
+    State: req.body.state,
+    Time_Close: req.body.time_close,
+    Draft_Name: req.body.draft_name,
+    Draft_Code: req.body.draft_code,
+    Questions: req.body.questions,
+    Responses: req.body.responses,
+    Access: req.body.access
 });
 
-app.get('/api/forms',(req,res,next)=>{
-  formModel.find().then(documents=>{
-    res.status(200).json({
-      message: "This is fetched data",
-      forms: documents
+
+  finishedForm.save()
+    .then(savedForm => {
+      res.status(201).json(savedForm); // Respond with the saved form data
     })
-  })
-})
+    .catch(err => {
+      res.status(500).send(err); // Handle error if form saving fails
+    });
+  
+});
 
 
 //Create Ballot

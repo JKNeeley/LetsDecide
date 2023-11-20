@@ -29,8 +29,11 @@ const onError = error => {
       process.exit(1);
       break;
     case "EADDRINUSE":
-      console.error(bind + " is already in use");
-      process.exit(1);
+      console.error(bind + " is already in use, retrying...");
+      setTimeout(() => {
+        server.close();
+        server.listen(port);
+      }, 1000);
       break;
     default:
       throw error;
@@ -43,7 +46,7 @@ const onListening = () => {
   debug("Listening on " + bind);
 };
 
-const port = normalizePort(process.env.PORT || "3001");
+const port = normalizePort(process.env.PORT || "3000");
 app.set("port", port);
 
 const server = http.createServer(app);
