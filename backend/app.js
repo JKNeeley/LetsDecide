@@ -86,37 +86,36 @@ app.get('/api/forms',(req,res,next)=>{
 })
 
 
-//Create Ballot
-app.post('/api/questions', (req, res) => {
-  var question_count = req.body.question_count;
-  var i = 0;
-  /*
-  Passing the questions through post request
-  Each element from the post request will be an array, this way we can pass in as many questions as we want
-  *Options will be a 2d array
-  */
+//Create Questions
+app.post('/api/questions', async (req, res) => {
+  try {
+    const questionsData = req.body.questions;
+    const questionArray = [];
+    
+    //go through each questions data, save, then add it to the questionArray for later
+    for (const question of questionsData) {
+      const values = {
+        Parent_Form_ID: question.Parent_Form_ID,
+        Type: question.Type,
+        Description: question.Description,
+        Show_Top: question.Show_Top,
+        Options: question.Options.split(',').map(option => option.trim())
+      }
+      questionArray.push(values);
+    }
 
-  while(i<question_count)
-  {
-    let question = new questionModel(
-      {
-        ID: req.body.id[i],
-        Parent_Form_ID: req.body.parent_form_id[i],
-        Type: req.body.type[i],
-        Description: req.body.description[i],
-        Show_Top: null,
-        Options: req.body.options[i]//array
-      });
-    questionModel.save()
-    .then(() => {
-      console.log('Data saved')
-    })
-    .catch((error) => {
-      console.log('Error saving data: ', error);
-    })
-    i++;
+    //create new questionModel to save to db, assign array of values to the Questions:
+    const newQuestion = questionModel({});
+    newQuestion.Questions = questionArray;
+    newQuestion.save();
+    res.send("Questions Saved");
+  } catch (error) {
+    console.error('Error saving questions:', error);
+    res.status(500).send('Error saving questions');
   }
 });
+
+
 
 
 //where the voters send their response

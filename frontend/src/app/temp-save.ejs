@@ -2,14 +2,33 @@
 <html>
 <head>
   <title>Form Submission</title>
+  <script>
+    function addQuestion() {
+      const form = document.getElementById('questionForm');
+      const div = document.createElement('div');
+
+      const labels = ['Parent_Form_ID', 'Type', 'Description', 'Show_Top', 'Options'];
+      for (let i = 0; i < labels.length; i++) {
+        const label = document.createElement('label');
+        label.textContent = labels[i] + ':';
+        const input = document.createElement('input');
+        input.setAttribute('type', i === 1 || i === 3 ? 'number' : 'text');
+        input.setAttribute('name', `questions[${form.children.length}][${labels[i]}]`);
+        input.setAttribute('placeholder', labels[i]);
+        div.appendChild(label);
+        div.appendChild(input);
+        div.appendChild(document.createElement('br'));
+      }
+      div.appendChild(document.createElement('br'));
+
+      form.appendChild(div);
+    }
+  </script>
 </head>
 <body>
   <h1>Submit Form</h1>
-  <form action="/api/forms" method="POST">
-    <% for (let i = 1; i <= 10; i++) { %>
-      <input type="text" name="questions[]" placeholder="Question <%= i %>">
-    <% } %>
-    <!-- Add more inputs with the same name="questions[]" for additional questions -->
+  <form id="questionForm" action="/api/questions" method="POST">
+    <button type="button" onclick="addQuestion()">Add Question</button>
     <button type="submit">Submit</button>
   </form>
 </body>
