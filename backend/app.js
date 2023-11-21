@@ -43,11 +43,14 @@ app.use((req, res, next)=>{
   next();
 })
 
-app.get('/src/app/temp-save', (req, res) => {
-  res.render('temp-save');
+app.get('/src/app/temp-save-questions', (req, res) => {
+  res.render('temp-save-questions');
 });
 app.get('/src/app/temp-save-responses', (req, res) => {
   res.render('temp-save-responses');
+});
+app.get('/src/app/temp-save-access', (req, res) => {
+  res.render('temp-save-access');
 });
 
 
@@ -131,34 +134,46 @@ app.post('/api/responses', (req, res) => {
     
     res.send(responseArray);
     
-    //create new responseModel to save to db, assign array of values to the Questions:
+    //create new responseModel to save to db, assign array of values to the Responses:
     const newResponse = responseModel({});
     newResponse.Responses = responseArray;
     newResponse.save();
     res.send("Questions Saved");
     
   } catch (error) {
-    //console.error('Error saving questions:', error);
-    //res.status(500).send('Error saving questions');
+    console.error('Error saving responses:', error);
+    res.status(500).send('Error saving responses');
   }
 });
 
 app.post('/api/access', (req, res) => {
+  const accessData = req.body.access[0];
+  
+  if(accessData.Voted == 'on'){accessData.Voted = true;}
+  else{accessData.Voted = false;}
+  const values = {
+      Parent_Form_ID: accessData.Parent_Form_ID,
+      Email: accessData.Email,
+      Passcode: accessData.Passcode,
+      Voted: accessData.Voted
+  }
+  
   let access = new accessModel(
     {
-      ID: req.body.id,
-      Parent_Form_ID: req.body.parent_form_id,
-      Email: req.body.email,
-      Passcode: req.body.passcode,
-      Voted: req.body.voted
+      Access: values
     });
-    accessModel.save()
-    .then(() => {
-      console.log('Data saved')
-    })
-    .catch((error) => {
-      console.log('Error saving data: ', error);
-    })
+      
+  //res.send(access);
+  
+  access.save()
+  .then(() => {
+    res.send('Data saved')
+  })
+  .catch((error) => {
+    console.log('Error saving data: ', error);
+  })
+  
+    
 });
 
 
