@@ -44,8 +44,10 @@ app.use((req, res, next)=>{
 })
 
 app.get('/src/app/temp-save', (req, res) => {
-  //console.log("Loaded");
-  res.render('temp-save'); // Assuming 'temp-save.ejs' is your EJS template file
+  res.render('temp-save');
+});
+app.get('/src/app/temp-save-responses', (req, res) => {
+  res.render('temp-save-responses');
 });
 
 
@@ -114,19 +116,31 @@ app.post('/api/questions', async (req, res) => {
 
 //where the voters send their response
 app.post('/api/responses', (req, res) => {
-  let response = new responseModel(
-    {
-      ID: req.body.id,
-      Parent_Form_ID: req.body.parent_form_id,
-      Answers: req.body.answers //array
-    });
-    responseModel.save()
-    .then(() => {
-      console.log('Data saved')
-    })
-    .catch((error) => {
-      console.log('Error saving data: ', error);
-    })
+  try {
+    const responseData = req.body.responses;
+    const responseArray = [];
+    
+    for (const response of responseData) {
+      const values = {
+        Parent_Form_ID: response.Parent_Form_ID,
+        Answers: response.Answers
+      }
+      responseArray.push(values);
+      
+    }
+    
+    res.send(responseArray);
+    
+    //create new responseModel to save to db, assign array of values to the Questions:
+    const newResponse = responseModel({});
+    newResponse.Responses = responseArray;
+    newResponse.save();
+    res.send("Questions Saved");
+    
+  } catch (error) {
+    //console.error('Error saving questions:', error);
+    //res.status(500).send('Error saving questions');
+  }
 });
 
 app.post('/api/access', (req, res) => {
