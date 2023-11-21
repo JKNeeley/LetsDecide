@@ -13,4 +13,4 @@ const formSchema = new mongoose.Schema({
   Access_ID:     {type: String}  // not required; only if private
 });
 
-module.exports = mongoose.model('Form',formSchema)
+module.exports = mongoose.model('form',formSchema)

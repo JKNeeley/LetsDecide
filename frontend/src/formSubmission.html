@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Form Submission</title>
+</head>
+<body>
+  <h1>Submit Form</h1>
+  <form action="/api/forms" method="post">
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title" required><br><br>
+    
+    <label for="description">Description:</label>
+    <input type="text" id="description" name="description" required><br><br>
+    
+    <label for="type">Type:</label>
+    <input type="number" id="type" name="type" required><br><br>
+    
+    <label for="state">State:</label>
+    <input type="number" id="state" name="state" required><br><br>
+    
+    <label for="time_close">Time Close:</label>
+    <input type="text" id="time_close" name="time_close" required><br><br>
+    
+    <label for="draft_name">Draft Name:</label>
+    <input type="text" id="draft_name" name="draft_name"><br><br>
+    
+    <label for="draft_code">Draft Code:</label>
+    <input type="text" id="draft_code" name="draft_code"><br><br>
+    
+    <input type="submit" value="Submit">
+  </form>
+</body>
+</html>

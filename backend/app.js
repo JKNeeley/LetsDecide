@@ -5,6 +5,8 @@ const path = require('path');
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 
+app.use(express.static(path.join(__dirname, '../frontend/src')));
+
 
 mongoose.connect('mongodb+srv://admin:oum6ZdhsYIFYEyuR@cluster0.5cmaqsn.mongodb.net/letsdecide?retryWrites=true&w=majority')
   .then(()=>{
@@ -50,40 +52,32 @@ app.get('/src/app/temp-save', (req, res) => {
 // Define routes here
 app.get('/', (req, res) => res.send('Hello World!'))
 
-
 //Create Vote Form
 app.post('/api/forms', (req, res) => {
-  const finishedForm = new formModel(
-    {
-      Title: req.body.title,
-      Description: req.body.description,
-      Type: req.body.type,
-      State: req.body.state,
-      Time_Close: req.body.time_close,//date
-      Draft_Name: req.body.draft_name,
-      Draft_Code: req.body.draft_code,
-      Questions: req.body.questions,//array
-      Responses: req.body.responses,//array
-      Access: req.body.responses//array
-    });
-    finishedForm.save()
-    .then(() => {
-      console.log('Data saved')
-    })
-    .catch((error) => {
-      console.log('Error saving data: ', error);
-    })
-    res.redirect('/');
+
+const finishedForm = new formModel({
+    Title: req.body.title,
+    Description: req.body.description,
+    Type: req.body.type,
+    State: req.body.state,
+    Time_Close: req.body.time_close,
+    Draft_Name: req.body.draft_name,
+    Draft_Code: req.body.draft_code,
+    Questions: req.body.questions,
+    Responses: req.body.responses,
+    Access: req.body.access
 });
 
-app.get('/api/forms',(req,res,next)=>{
-  formModel.find().then(documents=>{
-    res.status(200).json({
-      message: "This is fetched data",
-      forms: documents
+
+  finishedForm.save()
+    .then(savedForm => {
+      res.status(201).json(savedForm); // Respond with the saved form data
     })
-  })
-})
+    .catch(err => {
+      res.status(500).send(err); // Handle error if form saving fails
+    });
+  
+});
 
 
 //Create Questions
