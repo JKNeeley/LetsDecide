@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Response Submission</title>
+</head>
+<body>
+  <h1>Submit Responses</h1>
+  <form action="/api/responses" method="POST">
+    <div id="responsesContainer">
+      <div class="response">
+        <label for="parentFormId1">Parent Form ID for Response 1:</label>
+        <input type="text" id="parentFormId1" name="responses[0][Parent_Form_ID]" placeholder="Parent Form ID for Response 1" required><br><br>
+        <label for="answer1">Answer 1 for Response 1:</label>
+        <input type="text" id="answer1" name="responses[0][Answers][0]" placeholder="Answer 1 for Response 1" required><br><br>
+
+        <label for="answer2">Answer 2 for Response 1:</label>
+        <input type="text" id="answer2" name="responses[0][Answers][1]" placeholder="Answer 2 for Response 1" required><br><br>
+
+        <label for="answer3">Answer 3 for Response 1:</label>
+        <input type="text" id="answer3" name="responses[0][Answers][2]" placeholder="Answer 3 for Response 1" required><br><br>
+      </div>
+      <br><br>
+      <div class="response">
+        <label for="parentFormId2">Parent Form ID for Response 2:</label>
+        <input type="text" id="parentFormId2" name="responses[1][Parent_Form_ID]" placeholder="Parent Form ID for Response 2" required><br><br>
+        <label for="answer4">Answer 1 for Response 2:</label>
+        <input type="text" id="answer4" name="responses[1][Answers][0]" placeholder="Answer 1 for Response 2" required><br><br>
+
+        <label for="answer5">Answer 2 for Response 2:</label>
+        <input type="text" id="answer5" name="responses[1][Answers][1]" placeholder="Answer 2 for Response 2" required><br><br>
+
+        <label for="answer6">Answer 3 for Response 2:</label>
+        <input type="text" id="answer6" name="responses[1][Answers][2]" placeholder="Answer 3 for Response 2" required><br><br>
+      </div>
+      <br><br>
+      <div class="response">
+        <label for="parentFormId3">Parent Form ID for Response 3:</label>
+        <input type="text" id="parentFormId3" name="responses[2][Parent_Form_ID]" placeholder="Parent Form ID for Response 3" required><br><br>
+
+        <label for="answer7">Answer 1 for Response 3:</label>
+        <input type="text" id="answer7" name="responses[2][Answers][0]" placeholder="Answer 1 for Response 3" required><br><br>
+
+        <label for="answer8">Answer 2 for Response 3:</label>
+        <input type="text" id="answer8" name="responses[2][Answers][1]" placeholder="Answer 2 for Response 3" required><br><br>
+
+        <label for="answer9">Answer 3 for Response 3:</label>
+        <input type="text" id="answer9" name="responses[2][Answers][2]" placeholder="Answer 3 for Response 3" required><br><br>
+      </div>
+    </div>
+    <input type="submit" value="Submit">
+  </form>
+</body>
+</html>
