@@ -7,6 +7,7 @@ const bodyParser = require('body-parser')
 app.use(express.static(path.join(__dirname, '../frontend/src')));
 
 mongoose.connect('mongodb+srv://admin:oum6ZdhsYIFYEyuR@cluster0.5cmaqsn.mongodb.net/letsdecide?retryWrites=true&w=majority')
+//mongoose.connect('mongodb+srv://admin:oum6ZdhsYIFYEyuR@cluster0.5cmaqsn.mongodb.net/letsdecidetest?retryWrites=true&w=majority')
   .then(()=>{
     console.log('Connected to database')
   })
@@ -199,7 +200,7 @@ app.post('/api/questions', async (req, res) => {
   try {
     const questionsData = req.body.questions;
     const questionArray = [];
-    
+
     //go through each questions data, save, then add it to the questionArray for later
     for (const question of questionsData) {
       const values = {
@@ -231,24 +232,24 @@ app.post('/api/responses', (req, res) => {
   try {
     const responseData = req.body.responses;
     const responseArray = [];
-    
+
     for (const response of responseData) {
       const values = {
         Parent_Form_ID: response.Parent_Form_ID,
         Answers: response.Answers
       }
       responseArray.push(values);
-      
+
     }
-    
+
     res.send(responseArray);
-    
+
     //create new responseModel to save to db, assign array of values to the Responses:
     const newResponse = responseModel({});
     newResponse.Responses = responseArray;
     newResponse.save();
     res.send("Questions Saved");
-    
+
   } catch (error) {
     console.error('Error saving responses:', error);
     res.status(500).send('Error saving responses');
@@ -258,7 +259,7 @@ app.post('/api/responses', (req, res) => {
 
 app.post('/api/access', (req, res) => {
   const accessData = req.body.access[0];
-  
+
   if(accessData.Voted == 'on'){accessData.Voted = true;}
   else{accessData.Voted = false;}
   const values = {
@@ -267,14 +268,14 @@ app.post('/api/access', (req, res) => {
       Passcode: accessData.Passcode,
       Voted: accessData.Voted
   }
-  
+
   let access = new accessModel(
     {
       Access: values
     });
-      
+
   //res.send(access);
-  
+
   access.save()
   .then(() => {
     res.send('Data saved')
@@ -282,8 +283,8 @@ app.post('/api/access', (req, res) => {
   .catch((error) => {
     console.log('Error saving data: ', error);
   })
-  
-    
+
+
 });
 
 
