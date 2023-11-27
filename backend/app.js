@@ -111,7 +111,7 @@ app.get('/api/forms/result/:id', (req, res)=>{
           let answers = []
           //resp.Responses.forEach(to_arr)
           for (let i = 0; i < resp.Responses.length; i++){
-            console.log(resp.Responses[i].Answers)
+            //console.log(resp.Responses[i].Answers)
             answers.push(resp.Responses[i].Answers)
           }
           console.log(answers)
@@ -138,10 +138,10 @@ function countVotes(ans)
 {
   count = []
   for (let i = 0; i < ans[0].length; i++){
-    console.log('i')
+    //console.log('i')
     count.push([])
     for (let j = 0; j < ans.length; j++){
-        console.log('j')
+        //console.log('j')
         if (ans[j][i].length > 1){
             break
         }
@@ -156,11 +156,11 @@ function countVotes(ans)
         }
         if (!voteFound){
             count[i].push([vote,1])
-            console.log('no')
+            //console.log('no')
         }
     }
   }
-
+  console.log(count)
   return count
 }
 
