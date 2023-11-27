@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const accessSchema = new mongoose.Schema({
-  Access: [{
+  Accesses: [{
     Parent_Form_ID: String,
     Email: String,
     Passcode: String,
@@ -9,4 +9,4 @@ const accessSchema = new mongoose.Schema({
   }]
 })
 
-module.exports = mongoose.model('Access', accessSchema)
+module.exports = mongoose.model('Accesses', accessSchema)

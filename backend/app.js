@@ -1,9 +1,7 @@
 const express = require('express')
 const app = express()
-const port = 3000
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
-
 
 mongoose.connect('mongodb+srv://admin:oum6ZdhsYIFYEyuR@cluster0.5cmaqsn.mongodb.net/letsdecide?retryWrites=true&w=majority')
   .then(()=>{
@@ -13,11 +11,10 @@ mongoose.connect('mongodb+srv://admin:oum6ZdhsYIFYEyuR@cluster0.5cmaqsn.mongodb.
     console.log('connection error')
 })
 
-
 const formModel = require('./models/form')
 const questionModel = require('./models/question')
 const responseModel = require('./models/response')
-const accessModel = require('./models/access')
+const accessModel = require('./models/access');
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:false}))
@@ -35,26 +32,119 @@ app.use((req, res, next)=>{
 })
 
 
-// Define routes here
+/// Define routes here ///
+
+
+// GET
+
+
 app.get('/', (req, res) => res.send('Hello World!'))
-//app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 
+// Returns all forms
+app.get('/api/forms',(req,res)=>{
+  formModel.find().then(documents=>{
+    res.status(200).json({
+      message: "All forms",
+      forms: documents
+    })
+  })
+})
 
-/* Not sure what this is actually supposed to do
-//Home
-app.post('/', (req, res) => {
-  if(req.body.email)
-  {
-    console.log(req.body.email);//display current account logged in
+// Returns form of a specific object ID
+app.get('/api/forms/:id', (req, res)=>{
+  formModel.findById(req.params.id).then(documents=>{
+    if (documents == null){
+      res.status(204).send('No document with this ID located')
+    }
+    else {
+      res.status(200).json({
+        form: documents
+      })
+    }
+  })
+  .catch((error) => {
+    console.log('Error fetching data: ', error);
+  })
+})
+
+// Returns the results of a form of a specific ID
+// WIP, only supports First-Past-The-Post
+app.get('/api/forms/result/:id', (req, res)=>{
+  formModel.findById(req.params.id).then(document=>{ //find form
+    if (document == null){
+      res.status(204).send('No document with this ID located')
+    }
+    /*
+    else if (document.State != 2) //check if form has closed
+    {
+      res.send('Vote has not yet concluded')
+    }
+    */
+    else{
+      responseModel.findById(document.Responses_ID).then(resp=>{ //find responses
+        if (resp == null){
+          res.status(204).send('No document with this ID located')
+        }
+        else{
+          let answers = []
+          //resp.Responses.forEach(to_arr)
+          for (let i = 0; i < resp.Responses.length; i++){
+            console.log(resp.Responses[i].Answers)
+            answers.push(resp.Responses[i].Answers)
+          }
+          console.log(answers)
+          let count = countVotes(answers)
+          res.status(200).send(count)
+        }
+      })
+    }
+  })
+  .catch((error) => {
+    console.log('Error fetching data: ', error);
+  })
+
+})
+
+function to_arr(x){
+  //console.log(x)
+  delete x.Parent_Form_ID
+  answers.push(x.Answers)
+}
+
+// Currently assumes First-Past-The-Post
+function countVotes(ans)
+{
+  count = []
+  for (let i = 0; i < ans[0].length; i++){
+    console.log('i')
+    count.push([])
+    for (let j = 0; j < ans.length; j++){
+        console.log('j')
+        if (ans[j][i].length > 1){
+            break
+        }
+        let vote = ans[j][i][0]
+        let voteFound = false
+        for (let k = 0; k < count[i].length; k++){
+            if (count[i][k][0] == vote){
+                voteFound = true
+                count[i][k][1] += 1
+                break
+            }
+        }
+        if (!voteFound){
+            count[i].push([vote,1])
+            console.log('no')
+        }
+    }
   }
-  else
-  {
-    console.log("Login");
-  }
-});
-*/
 
-// Define models here //
+  return count
+}
+
+
+
+// POST
 
 //Create Vote Form
 app.post('/api/forms', (req, res) => {
@@ -70,7 +160,7 @@ app.post('/api/forms', (req, res) => {
       Draft_Code: req.body.draft_code,
       Questions: req.body.questions,//array
       Responses: req.body.responses,//array
-      Access: req.body.responses//array
+      Accesses: req.body.accesses//array
     });
     finishedForm.save()
     .then(() => {
@@ -81,15 +171,6 @@ app.post('/api/forms', (req, res) => {
     })
     res.redirect('/');
 });
-
-app.get('/api/forms',(req,res,next)=>{
-  formModel.find().then(documents=>{
-    res.status(200).json({
-      message: "This is fetched data",
-      forms: documents
-    })
-  })
-})
 
 
 //Create Ballot
@@ -142,7 +223,7 @@ app.post('/api/responses', (req, res) => {
     })
 });
 
-app.post('/api/access', (req, res) => {
+app.post('/api/accesses', (req, res) => {
   let access = new accessModel(
     {
       ID: req.body.id,
