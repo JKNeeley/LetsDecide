@@ -14,6 +14,15 @@ mongoose.connect('mongodb+srv://admin:oum6ZdhsYIFYEyuR@cluster0.5cmaqsn.mongodb.
     console.log('connection error')
 })
 
+
+app.set('view engine', 'ejs'); // Set EJS as the view engine
+app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
+app.set('views', path.join(__dirname, '..', 'frontend', 'src', 'app')); // Set the views directory to the 'frontend/src/app' directory
+
+
+app.use(express.static(path.join(__dirname, '../frontend')));
+
+
 const formModel = require('./models/form')
 const questionModel = require('./models/question')
 const responseModel = require('./models/response')
