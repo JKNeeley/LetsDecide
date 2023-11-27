@@ -216,29 +216,29 @@ app.post('/api/questions', (req, res) => {
     })
     i++;
 
-const finishedForm = new formModel({
-    Title: req.body.title,
-    Description: req.body.description,
-    Type: req.body.type,
-    State: req.body.state,
-    Time_Close: req.body.time_close,
-    Draft_Name: req.body.draft_name,
-    Draft_Code: req.body.draft_code,
-    Questions: req.body.questions,
-    Responses: req.body.responses,
-    Access: req.body.access
-});
-
-
-  finishedForm.save()
-    .then(savedForm => {
-      res.status(201).json(savedForm); // Respond with the saved form data
-    })
-    .catch(err => {
-      res.status(500).send(err); // Handle error if form saving fails
-    });
+  const finishedForm = new formModel({
+      Title: req.body.title,
+      Description: req.body.description,
+      Type: req.body.type,
+      State: req.body.state,
+      Time_Close: req.body.time_close,
+      Draft_Name: req.body.draft_name,
+      Draft_Code: req.body.draft_code,
+      Questions: req.body.questions,
+      Responses: req.body.responses,
+      Access: req.body.access
   });
 
+
+    finishedForm.save()
+      .then(savedForm => {
+        res.status(201).json(savedForm); // Respond with the saved form data
+      })
+      .catch(err => {
+        res.status(500).send(err); // Handle error if form saving fails
+      });
+    }
+  });
 
 
 //Create Questions
