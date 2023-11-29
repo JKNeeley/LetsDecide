@@ -171,6 +171,8 @@ function countVotes(ans)
 
 //Create Vote Form
 app.post('/api/forms', (req, res) => {
+  console.log(req.body);
+  /*
   const finishedForm = new formModel(
     {
       ID: req.body.id,
@@ -193,6 +195,7 @@ app.post('/api/forms', (req, res) => {
       console.log('Error saving data: ', error);
     })
     res.redirect('/');
+    */
 });
 
 //Create Questions
