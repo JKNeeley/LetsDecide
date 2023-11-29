@@ -153,8 +153,6 @@ function countVotes(ans)
 //Create Vote Form
 app.post('/api/forms', async (req, res) => {
   try {
-    console.log(req.body);
-
     const newForm = new formModel({
       Title: req.body.title,
       Description: req.body.description,
@@ -167,8 +165,8 @@ app.post('/api/forms', async (req, res) => {
 
     const savedForm = await newForm.save();
     console.log('Form saved successfully:', savedForm);
-    const savedFormId = savedForm._id; // Access the generated _id
-    res.json({ savedFormId }); // Send the _id back in the response if needed
+    const savedFormId = savedForm._id;
+    res.json({ savedFormId });
   } catch (err) {
     console.error('Error saving form:', err);
     res.status(500).json({ error: 'An error occurred while saving the form.' });
@@ -180,47 +178,44 @@ app.post('/api/forms', async (req, res) => {
 
 //Create Questions
 app.post('/api/questions', async (req, res) => {
+  console.log(req.body);
+  /*
   try {
-    const questionsData = req.body.questions;
-    const questionArray = [];
+    const questions = req.body;
+    const savedResponses = await Promise.all(
+      questions.map(async (question) => {
+        const newQuestion = new questionModel(question);
+        return await newQuestion.save();
+      })
+    );
 
-    //go through each questions data, save, then add it to the questionArray for later
-    for (const question of questionsData) {
-      const values = {
-        Parent_Form_ID: question.Parent_Form_ID,
-        Type: question.Type,
-        Description: question.Description,
-        Show_Top: question.Show_Top,
-        Options: question.Options.split(',').map(option => option.trim())
-      }
-      questionArray.push(values);
-    }
-
-    //create new questionModel to save to db, assign array of values to the Questions:
-    const newQuestion = questionModel({});
-    newQuestion.Questions = questionArray;
-    newQuestion.save();
-    res.send("Questions Saved");
+    const responseIDs = savedResponses.map((response) => response._id);
+    res.status(200).json({ responseIDs });
   } catch (error) {
     console.error('Error saving questions:', error);
     res.status(500).send('Error saving questions');
   }
+  */
+ res.status(200).json({_id: 0});
 });
 
 
 
 
-//where the voters send their response
-app.post('/api/responses', (req, res) => {
-  try{
-    const newResponse = responseModel({});
-    newResponse.Responses = req.body;
-    newResponse.save();
+
+app.post('/api/responses', async (req, res) => {
+  try {
+    const newResponse = new responseModel({ Responses: req.body });
+    const savedResponse = await newResponse.save();
+    res.status(200).json({ _id: savedResponse._id });
   } catch (error) {
     console.error('Error saving responses:', error);
     res.status(500).send('Error saving responses');
   }
 });
+
+
+
 
 
 app.post('/api/access', (req, res) => {

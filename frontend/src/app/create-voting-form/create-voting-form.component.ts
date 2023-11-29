@@ -13,10 +13,23 @@ export interface Question {
   answers: string[];
 }
 
+interface QuestionStore{
+Questions: {
+  Parent_Form_ID: string,
+  Type: number,
+  Description: string,
+  Show_Top: number,
+  Options: string[]
+}
+
+}
+
 interface Response {
   Parent_Form_ID: string,
   Responses: []
 }
+
+
 
 @Component({
   selector: 'app-create-voting-form',
@@ -36,24 +49,21 @@ export class CreateVotingFormComponent {
   // rType: 
 
 addQuestion() {
-  // Add a new question object to the array
   this.questions.push({
     title: '',
     description: '',
-    endTime: '', // Initialize with default values
+    endTime: '',
     questionText: '',
-    answerInput: '', // Input for comma-separated answers
-    answers: [] // Array to hold individual answers
+    answerInput: '',
+    answers: []
   });
 }
 
 removeQuestion(index: number) {
-  // Remove a question based on its index
   this.questions.splice(index, 1);
 }
 
 parseAnswers(question: Question) {
-  // Split the comma-separated answers and store them in the answers array
   question.answers = question.answerInput.split(',').map(answer => answer.trim());
 }
 
@@ -61,7 +71,19 @@ parseAnswers(question: Question) {
 
   constructor(private router: Router, private http: HttpClient) {}
   
-  saveQuestions(questions: any, ID: string){}
+  saveQuestions(questions: any, ID: string)
+  {
+    this.http.post<any>('http://localhost:3000/api/questions', questions)
+      .subscribe(
+        (response) => {
+          return response.savedQuestion._id;
+        },
+        (error) => {
+          console.error('Error sending questions:', error);
+          return -1;
+        }
+      );
+  }
   createResponses(ID: string)
   {
     const rsp: Response = {
@@ -72,24 +94,36 @@ parseAnswers(question: Question) {
     this.http.post<any>('http://localhost:3000/api/responses', rsp)
       .subscribe(
         (response) => {
-          console.log('Response sent successfully:', response.savedResponseId);
+          return response.savedResponse._id;
         },
         (error) => {
           console.error('Error sending response:', error);
-          
+          return -1;
         }
       );
   }
 
   onFormCreation(form: any)
   {
-    console.log(form)
+    //console.log(form)
+    let Response_ID;
+    let Question_ID;
+
+
+
+
     this.http.post<any>('http://localhost:3000/api/forms', form)
       .subscribe(
         (response) => {
           let id = response.savedFormId
           console.log('Form sent successfully:', id);
-          this.createResponses(id);
+          Response_ID = this.createResponses(id);
+          
+          
+
+          //Question_ID = this.saveQuestions(questionsData, id);
+
+
         },
         (error) => {
           console.error('Error sending form:', error);
