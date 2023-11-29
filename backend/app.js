@@ -150,10 +150,6 @@ function countVotes(ans)
   return count
 }
 
-
-
-// POST
-
 //Create Vote Form
 app.post('/api/forms', async (req, res) => {
   try {
@@ -175,7 +171,6 @@ app.post('/api/forms', async (req, res) => {
     res.json({ savedFormId }); // Send the _id back in the response if needed
   } catch (err) {
     console.error('Error saving form:', err);
-    // Handle error
     res.status(500).json({ error: 'An error occurred while saving the form.' });
   }
 });
@@ -217,27 +212,10 @@ app.post('/api/questions', async (req, res) => {
 
 //where the voters send their response
 app.post('/api/responses', (req, res) => {
-  try {
-    const responseData = req.body.responses;
-    const responseArray = [];
-
-    for (const response of responseData) {
-      const values = {
-        Parent_Form_ID: response.Parent_Form_ID,
-        Answers: response.Answers
-      }
-      responseArray.push(values);
-
-    }
-
-    res.send(responseArray);
-
-    //create new responseModel to save to db, assign array of values to the Responses:
+  try{
     const newResponse = responseModel({});
-    newResponse.Responses = responseArray;
+    newResponse.Responses = req.body;
     newResponse.save();
-    res.send("Questions Saved");
-
   } catch (error) {
     console.error('Error saving responses:', error);
     res.status(500).send('Error saving responses');

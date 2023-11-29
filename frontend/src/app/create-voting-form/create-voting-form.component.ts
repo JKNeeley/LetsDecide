@@ -7,10 +7,15 @@ import { HttpClient } from '@angular/common/http';
 export interface Question {
   title: string;
   description: string;
-  endTime: string; // Consider using Date type or a specific format
+  endTime: Date;
   questionText: string;
-  answerInput: string; // A string to hold comma-separated answers
-  answers: string[]; // Array to hold individual answers
+  answerInput: string;
+  answers: string[];
+}
+
+interface Response {
+  Parent_Form_ID: string,
+  Responses: []
 }
 
 @Component({
@@ -56,27 +61,46 @@ parseAnswers(question: Question) {
 
   constructor(private router: Router, private http: HttpClient) {}
   
+  saveQuestions(questions: any, ID: string){}
+  createResponses(ID: string)
+  {
+    const rsp: Response = {
+      Parent_Form_ID: ID,
+      Responses: []
+    };
+
+    this.http.post<any>('http://localhost:3000/api/responses', rsp)
+      .subscribe(
+        (response) => {
+          console.log('Response sent successfully:', response.savedResponseId);
+        },
+        (error) => {
+          console.error('Error sending response:', error);
+          
+        }
+      );
+  }
+
   onFormCreation(form: any)
   {
     console.log(form)
     this.http.post<any>('http://localhost:3000/api/forms', form)
       .subscribe(
         (response) => {
-          console.log('Form sent successfully:', response.savedFormId);
-          
-          // Handle response from the server as needed
+          let id = response.savedFormId
+          console.log('Form sent successfully:', id);
+          this.createResponses(id);
         },
         (error) => {
           console.error('Error sending form:', error);
-          // Handle error
+          
         }
       );
     
   }
-  
     //this.navigateToHomePage();
     navigateToHomePage() {
-      this.router.navigate(['/']); // Navigate to the desired route after form submission
+      this.router.navigate(['/']);
     }
 
   }
