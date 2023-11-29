@@ -62,7 +62,8 @@ parseAnswers(question: Question) {
     this.http.post<any>('http://localhost:3000/api/forms', form)
       .subscribe(
         (response) => {
-          console.log('Form sent successfully:', response);
+          console.log('Form sent successfully:', response.savedFormId);
+          
           // Handle response from the server as needed
         },
         (error) => {
