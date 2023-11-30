@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { FormService } from './create-voting-form.service'
 
 
 export interface Question {
@@ -69,75 +70,41 @@ parseAnswers(question: Question) {
 
   showSaveCredentialsPopup = false;
 
-  constructor(private router: Router, private http: HttpClient) {}
+  constructor(private router: Router, private formService: FormService) {}
   
-  saveQuestions(questions: any, ID: string)
-  {
-    this.http.post<any>('http://localhost:3000/api/questions', questions)
-      .subscribe(
-        (response) => {
-          return response.savedQuestion._id;
-        },
-        (error) => {
-          console.error('Error sending questions:', error);
-          return -1;
-        }
-      );
-  }
-  createResponses(ID: string)
-  {
-    const rsp: Response = {
-      Parent_Form_ID: ID,
-      Responses: []
-    };
-    let responseId;
-
-    this.http.post<any>('http://localhost:3000/api/responses', rsp)
-      .subscribe(
-        (response) => {
-          responseId = response?.savedResponse?._id;
-        },
-        (error) => {
-          console.error('Error sending response:', error);
-          responseId = -1;
-        }
-      );
-      return responseId;
+  //Form
+  onFormCreation(form: any) {
+    this.formService.saveForm(form).subscribe(
+      (response) => {
+        const id = response.savedFormId;
+        console.log('Form sent successfully:', id);
+        this.createResponses(id);
+        // this.saveQuestions(questionsData, id);
+      },
+      (error) => {
+        console.error('Error sending form:', error);
+      }
+    );
   }
 
-  onFormCreation(form: any)
-  {
-    //console.log(form)
-    let Response_ID;
-    let Question_ID;
-
-
-
-
-    this.http.post<any>('http://localhost:3000/api/forms', form)
-      .subscribe(
-        (response) => {
-          let id = response.savedFormId
-          console.log('Form sent successfully:', id);
-          Response_ID = this.createResponses(id);
-          
-          
-
-          //Question_ID = this.saveQuestions(questionsData, id);
-
-
-        },
-        (error) => {
-          console.error('Error sending form:', error);
-          
-        }
-      );
-    
+  //Response
+  createResponses(ID: string) {
+    this.formService.createResponses(ID).subscribe(
+      (response) => {
+        const responseId = response?.savedResponse?._id;
+        // Do something with the response ID
+      },
+      (error) => {
+        console.error('Error sending response:', error);
+      }
+    );
   }
-    //this.navigateToHomePage();
-    navigateToHomePage() {
-      this.router.navigate(['/']);
-    }
+
+
+  //this.navigateToHomePage();
+  navigateToHomePage() {
+    this.router.navigate(['/']);
+  }
 
   }
 
