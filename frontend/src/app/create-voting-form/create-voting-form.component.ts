@@ -90,17 +90,19 @@ parseAnswers(question: Question) {
       Parent_Form_ID: ID,
       Responses: []
     };
+    let responseId;
 
     this.http.post<any>('http://localhost:3000/api/responses', rsp)
       .subscribe(
         (response) => {
-          return response.savedResponse._id;
+          responseId = response?.savedResponse?._id;
         },
         (error) => {
           console.error('Error sending response:', error);
-          return -1;
+          responseId = -1;
         }
       );
+      return responseId;
   }
 
   onFormCreation(form: any)
