@@ -164,7 +164,7 @@ app.post('/api/forms', async (req, res) => {
     });
 
     const savedForm = await newForm.save();
-    console.log('Form saved successfully:', savedForm);
+    //console.log('Form saved successfully:', savedForm);
     const savedFormId = savedForm._id;
     res.json({ savedFormId });
   } catch (err) {
@@ -178,25 +178,16 @@ app.post('/api/forms', async (req, res) => {
 
 //Create Questions
 app.post('/api/questions', async (req, res) => {
-  console.log(req.body);
-  /*
   try {
-    const questions = req.body;
-    const savedResponses = await Promise.all(
-      questions.map(async (question) => {
-        const newQuestion = new questionModel(question);
-        return await newQuestion.save();
-      })
-    );
-
-    const responseIDs = savedResponses.map((response) => response._id);
-    res.status(200).json({ responseIDs });
+      const newQuestion = new questionModel();
+      newQuestion.Questions = req.body.Questions;
+      const savedQuestion = await newQuestion.save();
+      const savedQuestionId = savedQuestion._id;
+      res.status(200).json({ savedQuestionId });
   } catch (error) {
-    console.error('Error saving questions:', error);
-    res.status(500).send('Error saving questions');
+      console.error('Error saving questions:', error);
+      res.status(500).send('Error saving questions');
   }
-  */
- res.status(200).json({_id: 0});
 });
 
 
@@ -204,10 +195,12 @@ app.post('/api/questions', async (req, res) => {
 
 
 app.post('/api/responses', async (req, res) => {
+  console.log("Got to responses");
   try {
     const newResponse = new responseModel({ Responses: req.body });
     const savedResponse = await newResponse.save();
-    res.status(200).json({ _id: savedResponse._id });
+    const savedResponseId = savedResponse._id
+    res.status(200).json({ savedResponseId });
   } catch (error) {
     console.error('Error saving responses:', error);
     res.status(500).send('Error saving responses');

@@ -1,71 +1,66 @@
 <main class="form-page">
-    <div>
-        <h1>What are you voting on?</h1>
-        <form #fromSubmission="ngForm">
-            <h2>Step 1: Create your voting form.</h2>
-            <div class="form-container">
-                <div>
-                    <label for="title">Title:</label>
-                    <br>
-                    <input type="text" id="title" [(ngModel)]="title" name="title" required>
-                </div>
-                <br>
-                <div>
-                    <label for="description">Description:</label>
-                    <br>
-                    <input type="text" id="description" [(ngModel)]="description" name="description" required>
-                </div>
-                <br>
-                <div>
-                    <label for="endTime">End Time:</label>
-                    <br>
-                    <input type="datetime-local" id="endTime" [(ngModel)]="endTime" name="endTime" required>
-                </div>
-                <br>
-                <div *ngFor="let question of questions; let i = index">
-                    <!-- Each question -->
-                    <h2>Question {{ i + 1 }}</h2>
-                    <div class="form-container">
+  <div>
+      <h1>What are you voting on?</h1>
+      <form #fromSubmission="ngForm">
+          <h2>Step 1: Create your voting form.</h2>
+          <div class="form-container">
+              <div>
+                  <label for="title">Title:</label>
+                  <br>
+                  <input type="text" id="title" [(ngModel)]="title" name="title" required>
+              </div>
+              <br>
+              <div>
+                  <label for="description">Description:</label>
+                  <br>
+                  <input type="text" id="description" [(ngModel)]="description" name="description" required>
+              </div>
+              <br>
+              <div>
+                  <label for="endTime">End Time:</label>
+                  <br>
+                  <input type="datetime-local" id="endTime" [(ngModel)]="endTime" name="endTime" required>
+              </div>
+              <br>
+              <div *ngFor="let question of questions; let i = index">
+                  <!-- Each question -->
+                  <h2>Question {{ i + 1 }}</h2>
+                  <div class="form-container">
                       <!-- Your form inputs for each question -->
                       <div>
-                        <label for="title{{ i }}">Title:</label>
-                        <input type="text" id="title{{ i }}" [(ngModel)]="question.title" name="title{{ i }}" required>
+                          <label for="title{{ i }}">Title:</label>
+                          <input type="text" id="title{{ i }}" [(ngModel)]="question.title" name="title{{ i }}" required>
                       </div>
                       <!-- Other inputs for description, end time, question text, etc. -->
-                  
                       <!-- Input for comma-separated answers -->
                       <div>
-                        <label for="answerInput{{ i }}">Answers (separated by commas):</label>
-                        <input type="text" id="answerInput{{ i }}" [(ngModel)]="question.answerInput" name="answerInput{{ i }}" required>
+                          <label for="answerInput{{ i }}">Answers (separated by commas):</label>
+                          <input type="text" id="answerInput{{ i }}" [(ngModel)]="question.answerInput" name="answerInput{{ i }}" required>
                       </div>
-                  
                       <!-- Display individual answers for each question -->
                       <div *ngIf="question.answers.length > 0">
-                        <p>Answers:</p>
-                        <ul>
-                          <li *ngFor="let answer of question.answers">{{ answer }}</li>
-                        </ul>
+                          <p>Answers:</p>
+                          <ul>
+                              <li *ngFor="let answer of question.answers">{{ answer }}</li>
+                          </ul>
                       </div>
-                  
                       <!-- Button to remove the question -->
                       <button (click)="removeQuestion(i)">Remove Question</button>
-                    </div>
                   </div>
-                  
-                  <!-- Button to add a new question -->
-                  <button (click)="addQuestion()">Add Question</button>
-                <br>
-                
-            </div>
-            <br>
-            <br>
-            <div>
-                <h2>Step 2: Start voting!</h2>
-                <button class="button" (click)="onFormCreation(fromSubmission.value)">Start</button>
-                <br>
-                <button class="button" (click)="showSaveCredentialsPopup = true">Save</button>
-                <app-save-credentials-popup *ngIf="showSaveCredentialsPopup"></app-save-credentials-popup>
-            </div>
-            </form>
-    </div>
+              </div>
+              <!-- Button to add a new question -->
+              <button (click)="addQuestion()">Add Question</button>
+              <br>
+          </div>
+          <br>
+          <br>
+          <div>
+              <h2>Step 2: Start voting!</h2>
+              <button class="button" (click)="onFormCreation(fromSubmission.value)">Start</button>
+              <br>
+              <button class="button" (click)="showSaveCredentialsPopup = true">Save</button>
+              <app-save-credentials-popup *ngIf="showSaveCredentialsPopup"></app-save-credentials-popup>
+          </div>
+      </form>
+  </div>
 </main>

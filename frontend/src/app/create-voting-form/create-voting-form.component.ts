@@ -3,6 +3,9 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { FormService } from './create-voting-form.service'
+import { Observable, of } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
+
 
 
 export interface Question {
@@ -14,20 +17,19 @@ export interface Question {
   answers: string[];
 }
 
-interface QuestionStore{
-Questions: {
-  Parent_Form_ID: string,
-  Type: number,
-  Description: string,
-  Show_Top: number,
-  Options: string[]
-}
-
+interface QuestionStore {
+  Questions: {
+    Parent_Form_ID: string;
+    Description: string;
+    Type: number;
+    Show_Top: number;
+    Options: string[];
+  }[];
 }
 
 interface Response {
-  Parent_Form_ID: string,
-  Responses: []
+  Parent_Form_ID: string;
+  Responses: [];
 }
 
 
@@ -74,32 +76,68 @@ parseAnswers(question: Question) {
   
   //Form
   onFormCreation(form: any) {
-    this.formService.saveForm(form).subscribe(
-      (response) => {
-        const id = response.savedFormId;
-        console.log('Form sent successfully:', id);
-        this.createResponses(id);
-        // this.saveQuestions(questionsData, id);
-      },
-      (error) => {
-        console.error('Error sending form:', error);
-      }
-    );
-  }
+  console.log(form);
+  let parent_id, response_id, question_id;
+  this.formService.saveForm(form).subscribe(
+    (response) => {
+      parent_id = response.savedFormId;
+      console.log('Form sent successfully:', parent_id);
+      this.saveResponses(parent_id);
+      this.saveQuestions(parent_id, form);
+
+
+    }
+  );
+  
+}
+
 
   //Response
-  createResponses(ID: string) {
-    this.formService.createResponses(ID).subscribe(
+  saveResponses(ID: string){
+    let response_id = -1;
+    return this.formService.saveResponses(ID).subscribe(
+    (response) => {
+      response_id = response.savedResponse;
+      console.log('Response sent successfully:', response_id);
+    }
+  );
+  }
+
+
+   saveQuestions(ID: string, form: any){
+    let question_id = -1;
+    const questions: QuestionStore = {
+      Questions: []
+    };
+
+    let questionNumber = 0;
+    while (form[`title${questionNumber}`]) {
+      const title = form[`title${questionNumber}`];
+      const options = form[`answerInput${questionNumber}`]?.split(',')?.map((option: string) => option.trim()) || [];
+
+      const question = {
+        Parent_Form_ID: ID,
+        Description: title,
+        Type: 0,
+        Show_Top: 0,
+        Options: options
+      };
+
+      questions.Questions.push(question);
+      questionNumber++;
+    }
+    this.formService.saveQuestions(questions).subscribe(
       (response) => {
-        const responseId = response?.savedResponse?._id;
-        // Do something with the response ID
+        question_id = response?.savedResponse?._id;
+        //console.log("Q: ", response);
+        console.log(question_id);
       },
       (error) => {
         console.error('Error sending response:', error);
       }
     );
-  }
-
+    return question_id;
+   } 
 
   //this.navigateToHomePage();
   navigateToHomePage() {
