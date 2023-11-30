@@ -1,18 +1,18 @@
 <main class="form-page">
     <div>
-        <h1>(Vote Title)</h1>
-        <p>(Vote Description)</p>
-        <form>
-            <div class="form-container">
-                <p>(Vote Question)</p>
-                <label for="choice">Your Choice: </label>
-                <input type="text" id="choice" [(ngModel)]="choice" name="choice" required>
-            </div>
-            <br>
-            <br>
-            <div>
-                <button class="button" (click)="navigateToCastVote()">Vote</button>
-            </div>
-            </form>
-    </div>
+        <h1>{{ formData.title }}</h1>
+        <p>Description: {{ formData.description }}</p>
+  
+        <div *ngFor="let question of formData.questions; let i = index">
+          <h2>Question {{ i + 1 }}</h2>
+          <p>Title: {{ question.title }}</p>
+          <p>Answers:</p>
+          <ul>
+            <li *ngFor="let answer of question.answers">
+              {{ answer }}
+              <button (click)="chooseAnswer(i, answer)">Choose</button>
+            </li>
+          </ul>
+        </div>
+      </div>
 </main>

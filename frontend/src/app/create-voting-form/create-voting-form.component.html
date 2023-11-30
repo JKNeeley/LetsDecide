@@ -1,7 +1,7 @@
 <main class="form-page">
     <div>
         <h1>What are you voting on?</h1>
-        <form #fromSubmission="ngForm">
+        <form #formSubmission="ngForm">
             <h2>Step 1: Create your voting form.</h2>
             <div class="form-container">
                 <div>
@@ -61,10 +61,7 @@
             <br>
             <div>
                 <h2>Step 2: Start voting!</h2>
-                <button class="button" (click)="onFormCreation(fromSubmission.value)">Start</button>
-                <br>
-                <button class="button" (click)="showSaveCredentialsPopup = true">Save</button>
-                <app-save-credentials-popup *ngIf="showSaveCredentialsPopup"></app-save-credentials-popup>
+                <button class="button" (click)="onFormCreation(formSubmission.value)">Start</button>
             </div>
             </form>
     </div>

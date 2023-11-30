@@ -75,38 +75,37 @@ parseAnswers(question: Question) {
   //Form
   onFormCreation(form: any) {
     this.formService.saveForm(form).subscribe(
-      (response) => {
+      (response: { savedFormId: any; }) => {
         const id = response.savedFormId;
         console.log('Form sent successfully:', id);
         this.createResponses(id);
         // this.saveQuestions(questionsData, id);
       },
-      (error) => {
+      (error: any) => {
         console.error('Error sending form:', error);
       }
     );
+    this.navigateToHomePage
   }
 
   //Response
   createResponses(ID: string) {
     this.formService.createResponses(ID).subscribe(
-      (response) => {
+      (response: { savedResponse: { _id: any; }; }) => {
         const responseId = response?.savedResponse?._id;
         // Do something with the response ID
       },
-      (error) => {
+      (error: any) => {
         console.error('Error sending response:', error);
       }
     );
   }
 
-
-  //this.navigateToHomePage();
   navigateToHomePage() {
     this.router.navigate(['/']);
   }
 
-  }
+}
 
   
  
