@@ -15,6 +15,7 @@ import { EditCredentialsPopupComponent } from './edit-credentials-popup/edit-cre
 import { SaveCredentialsPopupComponent } from './save-credentials-popup/save-credentials-popup.component';
 import { CastLocalComponent } from './cast-local/cast-local.component';
 import { PiechartComponent } from './piechart/piechart.component';
+import { ResultsComponent } from './results/results.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { PiechartComponent } from './piechart/piechart.component';
     EditCredentialsPopupComponent,
     SaveCredentialsPopupComponent,
     CastLocalComponent,
-    PiechartComponent
+    PiechartComponent,
+    ResultsComponent
   ],
   imports: [
     BrowserModule,

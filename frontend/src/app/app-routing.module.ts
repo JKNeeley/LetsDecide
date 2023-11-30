@@ -7,6 +7,7 @@ import { EditDraftedVoteComponent } from './edit-drafted-vote/edit-drafted-vote.
 import { CastVoteComponent } from './cast-vote/cast-vote.component';
 import { CastLocalComponent } from './cast-local/cast-local.component';
 import { PiechartComponent } from './piechart/piechart.component';
+import { ResultsComponent } from './results/results.component';
 
 const routes: Routes = [
   { path: '', component: HomePageComponent },
@@ -15,7 +16,8 @@ const routes: Routes = [
   { path: 'edit-drafted-vote', component: EditDraftedVoteComponent },
   { path: 'cast-vote', component: CastVoteComponent },
   { path: 'cast-local', component: CastLocalComponent },
-  { path: 'piechart', component: PiechartComponent}
+  { path: 'piechart/:id', component: PiechartComponent},
+  { path: 'results/:id', component: ResultsComponent}
 ];
 
 @NgModule({
