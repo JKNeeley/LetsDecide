@@ -173,6 +173,27 @@ app.post('/api/forms', async (req, res) => {
   }
 });
 
+app.put('/api/forms/:formId/update', async (req, res) => {
+  const formId = req.params.formId;
+  const { responseId, questionId } = req.body;
+
+  try {
+    const updatedForm = await formModel.findByIdAndUpdate(
+      formId,
+      { $set: { Responses_ID: responseId, Questions_ID: questionId } },
+      { new: true }
+    );
+
+    if (!updatedForm) {
+      return res.status(404).json({ error: 'Form not found' });
+    }
+
+    res.status(200).json({ message: 'Form updated successfully', updatedForm });
+  } catch (error) {
+    console.error('Error updating form:', error);
+    res.status(500).json({ error: 'Failed to update form' });
+  }
+});
 
 
 
@@ -200,6 +221,7 @@ app.post('/api/responses', async (req, res) => {
     const newResponse = new responseModel({ Responses: req.body });
     const savedResponse = await newResponse.save();
     const savedResponseId = savedResponse._id
+    console.log(savedResponseId)
     res.status(200).json({ savedResponseId });
   } catch (error) {
     console.error('Error saving responses:', error);

@@ -21,4 +21,12 @@ export class FormService {
   saveQuestions(questions: any): Observable<any> {
     return this.http.post<any>('http://localhost:3000/api/questions', questions);
   }
+
+  updateFormWithIDs(formId: string, responseId: string, questionId: string): Observable<any> {
+    const body = {
+      responseId: responseId,
+      questionId: questionId
+    };
+    return this.http.put<any>(`http://localhost:3000/api/forms/${formId}/update`, body);
+  }
 }
