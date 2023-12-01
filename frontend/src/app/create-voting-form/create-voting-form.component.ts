@@ -74,19 +74,22 @@ parseAnswers(question: Question) {
   
   //Form
   onFormCreation(form: any) {
-    this.formService.saveForm(form).subscribe(
-      (response: { savedFormId: any; }) => {
-        const id = response.savedFormId;
-        console.log('Form sent successfully:', id);
-        this.createResponses(id);
-        // this.saveQuestions(questionsData, id);
-      },
-      (error: any) => {
-        console.error('Error sending form:', error);
-      }
-    );
-    this.navigateToHomePage
-  }
+  console.log(form);
+  let parent_id, response_id, question_id;
+  this.formService.saveForm(form).subscribe(
+    (response) => {
+      parent_id = response.savedFormId;
+      console.log('Form sent successfully:', parent_id);
+      this.saveResponses(parent_id);
+      this.saveQuestions(parent_id, form);
+
+
+    }
+  );
+  this.navigateToHomePage();
+  
+}
+
 
   //Response
   createResponses(ID: string) {

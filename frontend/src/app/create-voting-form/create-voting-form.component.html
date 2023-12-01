@@ -32,7 +32,6 @@
                         <input type="text" id="title{{ i }}" [(ngModel)]="question.title" name="title{{ i }}" required>
                       </div>
                       <!-- Other inputs for description, end time, question text, etc. -->
-                  
                       <!-- Input for comma-separated answers -->
                       <div>
                         <label for="answerInput{{ i }}">Answers (separated by commas):</label>
@@ -49,20 +48,18 @@
                   
                       <!-- Button to remove the question -->
                       <button (click)="removeQuestion(i)">Remove Question</button>
-                    </div>
                   </div>
-                  
-                  <!-- Button to add a new question -->
-                  <button (click)="addQuestion()">Add Question</button>
-                <br>
-                
-            </div>
-            <br>
-            <br>
-            <div>
-                <h2>Step 2: Start voting!</h2>
-                <button class="button" (click)="onFormCreation(formSubmission.value)">Start</button>
-            </div>
-            </form>
-    </div>
+              </div>
+              <!-- Button to add a new question -->
+              <button (click)="addQuestion()">Add Question</button>
+              <br>
+          </div>
+          <br>
+          <br>
+          <div>
+              <h2>Step 2: Start voting!</h2>
+              <button class="button" (click)="onFormCreation(fromSubmission.value)">Start</button>
+          </div>
+      </form>
+  </div>
 </main>
