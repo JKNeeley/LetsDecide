@@ -161,7 +161,10 @@ app.get('/api/forms/result/:id', (req, res)=>{
         console.log('sending results')
         console.log(results);
         // send results
-        res.status(200).send(results);
+        //res.status(200).send(results);
+        res.status(200).json({
+          results: results
+        });
       })
     })
   })

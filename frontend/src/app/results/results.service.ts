@@ -1,6 +1,7 @@
 import{ HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Results } from './results.model'
+import { Observable } from 'rxjs';
+import { Results } from './results.model';
 
 @Injectable({
   providedIn: 'root'
@@ -9,10 +10,10 @@ import { Results } from './results.model'
 export class ResultsService {
   constructor(private http: HttpClient){}
 
-  getResult(id: string){
+  getResult(id: string | null): Observable<Results> {
     console.log('GetResult called')
-    return this.http.get<{Result: Result}>('http://localhost:3000/api/forms/result/:id')
+    console.log(id)
+    return this.http.get<Results>('http://localhost:3000/api/forms/result/' + id)
   }
-
 
 }
