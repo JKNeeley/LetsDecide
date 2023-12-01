@@ -107,15 +107,16 @@ assign Results.Question[forEach]
 // Returns the Results of a form of a specific ID
 // WIP, only supports First-Past-The-Post
 app.get('/api/forms/result/:id', (req, res)=>{
-  formModel.findById(req.params.id).then(document=>{ //find form
-    if (document == null){ res.status(204).send('No form document with this ID located').end() }
+  console.log('/api/forms/result/:id')
+  formModel.findById(req.params.id).then(form=>{ //find form
+    if (form == null){ res.status(204).send('No form document with this ID located').end() }
     //check if form is closed
     // if (document.State != 2){ res.send('Vote has not yet concluded').end() }
-    responseModel.findById(document.Responses_ID).then(resp=>{ //find responses
+    responseModel.findById(form.Responses_ID).then(resp=>{ //find responses
       if (resp == null){ res.status(204).send('No response document with this ID located').end() }
       //check for 0 responses
       //todo
-      questionModel.findById(document.Questions_ID).then(quest=>{ //find questions
+      questionModel.findById(form.Questions_ID).then(quest=>{ //find questions
         if (quest == null){ res.status(204).send('No question document with this ID located').end() }
 
         // count answers
@@ -125,15 +126,40 @@ app.get('/api/forms/result/:id', (req, res)=>{
         }
         //console.log('answers')
         //console.log(answers)
-        let count = countVotes(answers, quest.Questions)
+
+        let count_res = countVotes(answers, quest.Questions)
+        //console.log('count_res')
+        //console.log(count_res)
 
         // get winners from count
-        //let winners = getWinners(quest, count)
+        let winners_res = getWinners(quest.Questions, count_res)
+        //console.log('winners_res')
+        //console.log(winners_res)
+
+        let questions_res = []
+        for (let i = 0; i < quest.Questions.length; i++){
+          console
+          let cur_q = quest.Questions[i]
+          questions_res.push({
+            description: cur_q.Description,
+            winners: winners_res[i],
+            count: count_res[i]
+          })
+        }
+        //console.log('questions_res')
+        //console.log(questions_res)
 
         // create results instance
-        const results = new resultsModel;
-          //populate
+        const results = new resultsModel(
+          {
+            title: form.Title,
+            description: form.Description,
+            questions: questions_res
+          }
+        )
 
+        console.log('sending results')
+        console.log(results);
         // send results
         res.status(200).send(results);
       })
@@ -156,19 +182,16 @@ function countVotes(ans, quest){
       options.push({option:quest[i].Options[j], votes:0})
     }
     //console.log('options')
-    //count.push(options)
+    count.push(options)
   }
-
-  //console.log('count')
-  //console.log(count)
 
   for (let i = 0; i < ans[0].length; i++){
     for (let j = 0; j < ans.length; j++){
         if (ans[j][i].length > 1){ break } // FPTP check
         let vote = ans[j][i][0]
         let voteFound = false
-        console.log('test')
-        console.log(count[i])
+        //console.log('test')
+        //console.log(count[i])
         for (let k = 0; k < count[i].length; k++){
             if (count[i][k].option == vote){
                 voteFound = true
@@ -184,13 +207,31 @@ function countVotes(ans, quest){
     count[i].sort(function(a,b){return b.votes - a.votes})
   }
 
-  console.log('returning')
-  console.log(count)
+  //console.log('returning')
+  //console.log(count)
   return count
 }
 
 function getWinners(quest, count){
-  return null
+  //console.log('winners start')
+  let winners = []
+  for (let i = 0; i < quest.length; i++){
+    //console.log(quest[i].Show_Top)
+    //console.log(count[i].slice(0,quest[i].Show_Top))
+    win_str = []
+    let win_objs = count[i].slice(0,quest[i].Show_Top)
+    for (let j = 0; j < win_objs.length; j++){
+      win_str.push(win_objs[j].option)
+    }
+    //console.log('winstr')
+    //console.log(win_str)
+
+    winners.push(win_str)
+  }
+
+  //console.log('winners end fun')
+  //console.log(winners)
+  return winners
 }
 
 
