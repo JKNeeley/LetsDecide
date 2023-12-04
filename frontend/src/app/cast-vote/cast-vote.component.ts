@@ -2,6 +2,8 @@
 import { Component, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { CastVoteService } from './cast-vote.service';
+import { NgModel } from '@angular/forms';
 
 @Component({
   selector: 'app-cast-vote',
@@ -10,12 +12,23 @@ import { Router } from '@angular/router';
 })
 export class CastVoteComponent {
   @Input() formData: any; // Replace 'any' with your actual data model interface
-  choice: string='';
+  
+  title: string='';
+  description: string='';
+  question: string='';
+  choices: string[] = ['Choice 1', 'Choice 2', 'Choice 3']; // Add your choices here
+  choice: string = '';
 
 
-  showSaveCredentialsPopup = false;
+  constructor(private router: Router, private voteService: CastVoteService) {}
 
-  constructor(private router: Router) {}
+  ngOnInit(): void {
+    this.voteService.getVoteDetails().subscribe((data) => {
+      this.title = data.title;
+      this.description = data.description;
+      this.question = data.question;
+    });
+  }
 
   chooseAnswer(questionIndex: number, selectedAnswer: string) {
     // Handle the logic for choosing an answer (e.g., update a response model)
