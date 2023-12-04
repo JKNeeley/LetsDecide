@@ -1,10 +1,10 @@
 export interface Results{
   title: string,
   description: string,
-  question: Array<questions>
+  questions: Array<Questions>
 }
 
-interface questions{
+export interface Questions{
   description: string,
   winners: Array<Array<string>>,
   count: Array<Array<counts>>

@@ -1,10 +1,9 @@
 <div class="home-page" *ngIf="isDataAvailable">
 <h1>{{results.title}}</h1>
 <h2>{{results.description}}</h2>
-<div *ngIf="num_questions > 0">
-  <div class="chart" *ngFor="let question of results.questions">
-    <p>{{question.description}}</p>
-    <p>hi</p>
-  </div>
-</div>
+<app-piechart
+  *ngFor="let question of results.questions; index as qnum"
+  [question]="question"
+  [qnum]="qnum">
+</app-piechart>
 </div>

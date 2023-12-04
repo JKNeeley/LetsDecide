@@ -2,19 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Results } from './results.model';
 import { ResultsService } from './results.service';
+import { PiechartComponent } from '../piechart/piechart.component';
 
 @Component({
   selector: 'app-results',
   templateUrl: './results.component.html',
   styleUrls: ['./results.component.css']
 })
-
-
-
 export class ResultsComponent implements OnInit{
 
-  results: any;
-  num_questions: any;
+  results!: Results;
+  num_questions!: number;
   isDataAvailable:boolean = false;
 
   constructor(

@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import Chart from 'chart.js/auto';
+import { Questions } from '../results/results.model';
+import { AfterContentInit } from '@angular/core';
 
 /*
 @Component({
@@ -33,24 +35,28 @@ export class PiechartComponent implements OnInit {
 
 */
 
-/////////
-
 @Component({
   selector: 'app-piechart',
   templateUrl: './piechart.component.html',
   styleUrls: ['./piechart.component.css']
 })
-export class PiechartComponent {
+export class PiechartComponent implements AfterContentInit {
+  @Input() question!: Questions;
+  @Input() qnum!: Number;
+
   constructor() { }
 
-  ngOnInit(): void {
-    this.createChart();
+  ngAfterContentInit(): void {
+    console.log(this.question.winners);
+    this.createChart(this.question, this.qnum);
   }
 
   public chart: any;
+  chart_json!: JSON;
 
-  createChart() {
-    this.chart = new Chart("MyChart", {
+  createChart(question : Questions, qnum: Number) {
+    console.log(qnum);
+    this.chart = new Chart(qnum.toString(), {
       type: 'pie',
       data: {
         labels: [
@@ -61,7 +67,7 @@ export class PiechartComponent {
           'Cotton'
         ],
         datasets: [{
-          label: 'Area and Production of Important Crops (2020-21)',
+          label: question.description,
           data: [9168.2, 1417.8, 3335.1, 1165.0, 2078.9],
           backgroundColor: [
             'rgb(255, 99, 132)',
@@ -78,7 +84,7 @@ export class PiechartComponent {
         plugins: {
           title: {
             display: true,
-            text: 'Area and Production of Important Crops (2020-21)',
+            text: question.description,
             font: {
               size: 24,
               weight: 'bold',
