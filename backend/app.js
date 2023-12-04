@@ -3,6 +3,7 @@ const app = express()
 const path = require('path');
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
+const cors = require('cors');
 
 app.use(express.static(path.join(__dirname, '../frontend/src')));
 
@@ -16,13 +17,7 @@ mongoose.connect('mongodb+srv://admin:oum6ZdhsYIFYEyuR@cluster0.5cmaqsn.mongodb.
 })
 
 
-app.set('view engine', 'ejs'); // Set EJS as the view engine
-app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
-app.set('views', path.join(__dirname, '..', 'frontend', 'src', 'app')); // Set the views directory to the 'frontend/src/app' directory
-
-
-app.use(express.static(path.join(__dirname, '../frontend')));
-
+app.use(cors());
 
 const formModel = require('./models/form')
 const questionModel = require('./models/question')
@@ -44,16 +39,6 @@ app.use((req, res, next)=>{
   console.log('Middleware');
   next();
 })
-
-app.get('/src/app/temp-save-questions', (req, res) => {
-  res.render('temp-save-questions');
-});
-app.get('/src/app/temp-save-responses', (req, res) => {
-  res.render('temp-save-responses');
-});
-app.get('/src/app/temp-save-access', (req, res) => {
-  res.render('temp-save-access');
-});
 
 
 /// Define routes here ///
@@ -243,91 +228,85 @@ function getWinners(quest, count){
 // POST Requests //
 
 //Create Vote Form
-app.post('/api/forms', (req, res) => {
-  const finishedForm = new formModel(
-    {
-      ID: req.body.id,
+app.post('/api/forms', async (req, res) => {
+  try {
+    const newForm = new formModel({
       Title: req.body.title,
       Description: req.body.description,
-      Type: req.body.type,
-      State: req.body.state,
-      Time_Close: req.body.time_close,//date
-      Draft_Name: req.body.draft_name,
-      Draft_Code: req.body.draft_code,
-      Questions: req.body.questions,//array
-      Responses: req.body.responses,//array
-      Accesses: req.body.accesses//array
+      Type: 0,
+      State: 0,
+      Time_Close: req.body.endTime, // date
+      Questions_ID: '0', 
+      Responses_ID: '0'
     });
-  finishedForm.save()
-  .then(() => {
-    console.log('Data saved')
-  })
-  .catch((error) => {
-    console.log('Error saving data: ', error);
-  })
-  res.redirect('/');
+    const savedForm = await newForm.save();
+    //console.log('Form saved successfully:', savedForm);
+    const savedFormId = savedForm._id;
+    res.json({ savedFormId });
+  } catch (err) {
+    console.error('Error saving form:', err);
+    res.status(500).json({ error: 'An error occurred while saving the form.' });
+  }
 });
+
+app.put('/api/forms/:formId/update', async (req, res) => {
+  const formId = req.params.formId;
+  const { responseId, questionId } = req.body;
+
+  try {
+    const updatedForm = await formModel.findByIdAndUpdate(
+      formId,
+      { $set: { Responses_ID: responseId, Questions_ID: questionId } },
+      { new: true }
+    );
+
+    if (!updatedForm) {
+      return res.status(404).json({ error: 'Form not found' });
+    }
+
+    res.status(200).json({ message: 'Form updated successfully', updatedForm });
+  } catch (error) {
+    console.error('Error updating form:', error);
+    res.status(500).json({ error: 'Failed to update form' });
+  }
+});
+
+
 
 //Create Questions
 app.post('/api/questions', async (req, res) => {
   try {
-    const questionsData = req.body.questions;
-    const questionArray = [];
-
-    //go through each questions data, save, then add it to the questionArray for later
-    for (const question of questionsData) {
-      const values = {
-        Parent_Form_ID: question.Parent_Form_ID,
-        Type: question.Type,
-        Description: question.Description,
-        Show_Top: question.Show_Top,
-        Options: question.Options.split(',').map(option => option.trim())
-      }
-      questionArray.push(values);
-    }
-
-    //create new questionModel to save to db, assign array of values to the Questions:
-    const newQuestion = questionModel({});
-    newQuestion.Questions = questionArray;
-    newQuestion.save();
-    res.send("Questions Saved");
+      const newQuestion = new questionModel();
+      newQuestion.Questions = req.body.Questions;
+      const savedQuestion = await newQuestion.save();
+      const savedQuestionId = savedQuestion._id;
+      res.status(200).json({ savedQuestionId });
   } catch (error) {
-    console.error('Error saving questions:', error);
-    res.status(500).send('Error saving questions');
+      console.error('Error saving questions:', error);
+      res.status(500).send('Error saving questions');
   }
 });
 
 
 
 
-//where the voters send their response
-app.post('/api/responses', (req, res) => {
+
+app.post('/api/responses', async (req, res) => {
+  console.log("Got to responses");
   try {
-    const responseData = req.body.responses;
-    const responseArray = [];
-
-    for (const response of responseData) {
-      const values = {
-        Parent_Form_ID: response.Parent_Form_ID,
-        Answers: response.Answers
-      }
-      responseArray.push(values);
-
-    }
-
-    res.send(responseArray);
-
-    //create new responseModel to save to db, assign array of values to the Responses:
-    const newResponse = responseModel({});
-    newResponse.Responses = responseArray;
-    newResponse.save();
-    res.send("Questions Saved");
-
+    const newResponse = new responseModel({ Responses: req.body });
+    const savedResponse = await newResponse.save();
+    const savedResponseId = savedResponse._id
+    console.log(savedResponseId)
+    res.status(200).json({ savedResponseId });
   } catch (error) {
     console.error('Error saving responses:', error);
     res.status(500).send('Error saving responses');
   }
 });
+
+
+
 
 
 app.post('/api/access', (req, res) => {

@@ -8,6 +8,8 @@ import { CastVoteComponent } from './cast-vote/cast-vote.component';
 import { CastLocalComponent } from './cast-local/cast-local.component';
 import { PiechartComponent } from './piechart/piechart.component';
 import { ResultsComponent } from './results/results.component';
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 const routes: Routes = [
   { path: '', component: HomePageComponent },
@@ -21,7 +23,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes), FormsModule, HttpClientModule],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
