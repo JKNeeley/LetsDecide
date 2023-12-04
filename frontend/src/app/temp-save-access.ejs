@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Access Form</title>
+</head>
+<body>
+  <h1>Submit Access Information</h1>
+  <form action="/api/access" method="POST">
+    <!-- Parent Form ID input -->
+    <label for="parentFormId">Parent Form ID:</label>
+    <input type="text" id="parentFormId" name="access[Parent_Form_ID]" placeholder="Parent Form ID" required><br><br>
+
+    <!-- Email input -->
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="access[Email]" placeholder="Email" required><br><br>
+
+    <!-- Passcode input -->
+    <label for="passcode">Passcode:</label>
+    <input type="password" id="passcode" name="access[Passcode]" placeholder="Passcode" required><br><br>
+
+    <!-- Voted input -->
+    <label for="voted">Voted:</label>
+    <input type="checkbox" id="voted" name="access[Voted]"><br><br>
+
+    <input type="submit" value="Submit">
+  </form>
+</body>
+</html>
