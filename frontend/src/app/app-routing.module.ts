@@ -6,6 +6,8 @@ import { CreateRoomVoteComponent } from './create-room-vote/create-room-vote.com
 import { EditDraftedVoteComponent } from './edit-drafted-vote/edit-drafted-vote.component';
 import { CastVoteComponent } from './cast-vote/cast-vote.component';
 import { CastLocalComponent } from './cast-local/cast-local.component';
+import { PiechartComponent } from './piechart/piechart.component';
+import { ResultsComponent } from './results/results.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -16,6 +18,8 @@ const routes: Routes = [
   { path: 'edit-drafted-vote', component: EditDraftedVoteComponent },
   { path: 'cast-vote', component: CastVoteComponent },
   { path: 'cast-local', component: CastLocalComponent },
+  { path: 'piechart/:id', component: PiechartComponent},
+  { path: 'results/:id', component: ResultsComponent}
 ];
 
 @NgModule({

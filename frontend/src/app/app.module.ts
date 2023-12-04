@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-
+import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
+
 import { AppComponent } from './app.component';
 import { HomePageComponent } from './home-page/home-page.component';
 import { CreateVotingFormComponent } from './create-voting-form/create-voting-form.component';
@@ -14,6 +15,8 @@ import { VoteCredentialsPopupComponent } from './vote-credentials-popup/vote-cre
 import { EditCredentialsPopupComponent } from './edit-credentials-popup/edit-credentials-popup.component';
 import { SaveCredentialsPopupComponent } from './save-credentials-popup/save-credentials-popup.component';
 import { CastLocalComponent } from './cast-local/cast-local.component';
+import { PiechartComponent } from './piechart/piechart.component';
+import { ResultsComponent } from './results/results.component';
 
 @NgModule({
   declarations: [
@@ -26,13 +29,16 @@ import { CastLocalComponent } from './cast-local/cast-local.component';
     VoteCredentialsPopupComponent,
     EditCredentialsPopupComponent,
     SaveCredentialsPopupComponent,
-    CastLocalComponent
+    CastLocalComponent,
+    PiechartComponent,
+    ResultsComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
