@@ -42,7 +42,6 @@ interface Response {
 
 
 
-
 export class CreateVotingFormComponent {
   
   title: string = '';
