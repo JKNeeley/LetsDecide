@@ -13,23 +13,26 @@ import { ResultsService } from './results.service';
 
 export class ResultsComponent implements OnInit{
 
-  result: Results | null = null;
+  results: any;
+  num_questions: any;
+  isDataAvailable:boolean = false;
 
   constructor(
     private route: ActivatedRoute,
     public resultsService: ResultsService
-  ){}
+  ){};
 
   ngOnInit() {
     console.log('oninit called');
-    const id = this.route.snapshot.paramMap.get('id')
+    const id = this.route.snapshot.paramMap.get('id');
+    this.resultsService.getResult(id).subscribe((res) => {
+        this.results = res;
+        console.log('this res');
+        console.log(this.results);
+        this.isDataAvailable = true;
 
-    this.resultsService.getResult(id)?.subscribe((result) => {
-        this.result = result;
-        console.log(this.result)
-        console.log('end')
+        this.num_questions = this.results.questions.length;
+        console.log('numq' + this.num_questions);
       })
-
-
   }
 }

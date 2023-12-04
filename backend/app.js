@@ -136,6 +136,7 @@ app.get('/api/forms/result/:id', (req, res)=>{
         //console.log('winners_res')
         //console.log(winners_res)
 
+        // format questions
         let questions_res = []
         for (let i = 0; i < quest.Questions.length; i++){
           console
@@ -158,13 +159,11 @@ app.get('/api/forms/result/:id', (req, res)=>{
           }
         )
 
-        console.log('sending results')
-        console.log(results);
+        //console.log('sending results')
+        //console.log(results);
+
         // send results
-        //res.status(200).send(results);
-        res.status(200).json({
-          results: results
-        });
+        res.status(200).send(results);
       })
     })
   })
@@ -236,6 +235,9 @@ function getWinners(quest, count){
   //console.log(winners)
   return winners
 }
+
+
+
 
 
 // POST Requests //
