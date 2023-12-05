@@ -14,6 +14,7 @@ import { VoteCredentialsPopupComponent } from './vote-credentials-popup/vote-cre
 import { CastLocalComponent } from './cast-local/cast-local.component';
 import { PiechartComponent } from './piechart/piechart.component';
 import { ResultsComponent } from './results/results.component';
+import { VoteFormIdPopupComponent } from './vote-form-id-popup/vote-form-id-popup.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { ResultsComponent } from './results/results.component';
     VoteCredentialsPopupComponent,
     CastLocalComponent,
     PiechartComponent,
-    ResultsComponent
+    ResultsComponent,
+    VoteFormIdPopupComponent
   ],
   imports: [
     BrowserModule,

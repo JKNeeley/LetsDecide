@@ -57,6 +57,9 @@
               <h2>Step 2: Start voting!</h2>
               <button class="button" (click)="onFormCreation(formSubmission.value)">Start</button>
           </div>
+          <div>
+            <app-vote-form-id-popup *ngIf="showVoteFormIdPopup"></app-vote-form-id-popup>
+          </div>
       </form>
   </div>
 </main>
