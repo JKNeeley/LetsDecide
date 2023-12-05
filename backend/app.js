@@ -326,6 +326,24 @@ app.post('/api/responses', async (req, res) => {
 });
 
 
+app.post('/api/addResponse', async (req, res) => {
+  const { response_id, Responses } = req.body;
+  
+  try {
+    const responseModel = await Responses.findOneAndUpdate(
+      { _id: response_id },
+      {
+        $addToSet: { //add to response with response_id
+          Responses: { $each: Responses }
+        }
+      },
+    );
+  } catch (error) {
+    res.status(500).json({ error: 'Could not update the response.' });
+  }
+}); 
+
+
 
 
 
