@@ -37,6 +37,7 @@ const formModel = require('./models/form')
 const questionModel = require('./models/question')
 const responseModel = require('./models/response')
 const accessModel = require('./models/access');
+const resultsModel = require('./models/results');
 const form = require('./models/form');
 
 /// Define routes here ///
@@ -328,7 +329,7 @@ app.post('/api/responses', async (req, res) => {
 
 app.post('/api/addResponse', async (req, res) => {
   const { response_id, Responses } = req.body;
-  
+
   try {
     const responseModel = await Responses.findOneAndUpdate(
       { _id: response_id },
