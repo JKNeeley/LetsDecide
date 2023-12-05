@@ -1,7 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, AfterViewInit } from '@angular/core';
 import Chart from 'chart.js/auto';
 import { Questions } from '../results/results.model';
-import { AfterContentInit } from '@angular/core';
 
 /*
 @Component({
@@ -40,13 +39,13 @@ export class PiechartComponent implements OnInit {
   templateUrl: './piechart.component.html',
   styleUrls: ['./piechart.component.css']
 })
-export class PiechartComponent implements AfterContentInit {
+export class PiechartComponent implements AfterViewInit {
   @Input() question!: Questions;
   @Input() qnum!: Number;
 
   constructor() { }
 
-  ngAfterContentInit(): void {
+  ngAfterViewInit(): void {
     console.log(this.question.winners);
     this.createChart(this.question, this.qnum);
   }
@@ -55,8 +54,12 @@ export class PiechartComponent implements AfterContentInit {
   chart_json!: JSON;
 
   createChart(question : Questions, qnum: Number) {
-    console.log(qnum);
-    this.chart = new Chart(qnum.toString(), {
+    console.log(qnum.toString());
+    var canvas = <HTMLCanvasElement> document.getElementById(qnum.toString());
+    const ctx = canvas.getContext('2d');
+    if (ctx == null) return;
+    else console.log(ctx);
+    this.chart = new Chart(ctx, {
       type: 'pie',
       data: {
         labels: [
