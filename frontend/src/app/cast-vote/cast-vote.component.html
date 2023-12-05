@@ -1,22 +1,22 @@
 <main class="form-page">
-  <div>
-    <h1>{{ results.title }}</h1>
-    <p>{{ results.description }}</p>
-    <form>
-      <div *ngFor="let question of results.questions;">
+  <div class="home-page" *ngIf="isDataAvailable">
+    <h1>{{ form.Title }}</h1>
+    <p>{{ form.Description }}</p>
+    <form #responseSubmission="ngForm">
+      <div *ngFor="let question of questions.Questions; index as index">
         <div class="form-container">
-          <p>{{ question.description }}</p>
+          <p>{{ question.Description }}</p>
           <label for="choice">Your Choice: </label>
           <!-- Replace the text input with a dropdown/select element -->
-          <select id="choice" [(ngModel)]="choice" name="choice" required>
-            <option *ngFor="let option of choices" [value]="option">{{ option }}</option>
+          <select id="choice{{index}}" [(ngModel)]="choices[index]" name="choice" required>
+            <option *ngFor="let option of question.Options" [value]="option">{{ option }}</option>
           </select>
         </div>
       </div>
       <br>
       <br>
       <div>
-        <button class="button" (click)="navigateToHomePage()">End</button>
+        <button class="button" (click)="submitResponse(responseSubmission.value)">Submit Vote</button>
       </div>
     </form>
   </div>

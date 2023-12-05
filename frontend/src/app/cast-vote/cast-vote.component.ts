@@ -1,10 +1,10 @@
 
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { CastVoteService } from './cast-vote.service';
 import { NgModel } from '@angular/forms';
-import { Results, Questions } from '../results/results.model';
-import { fom}
+import { Results } from '../results/results.model';
+import { Form, Questions } from './form.model';
 
 @Component({
   selector: 'app-cast-vote',
@@ -12,32 +12,49 @@ import { fom}
   styleUrls: ['./cast-vote.component.css']
 })
 export class CastVoteComponent {
-  //@Input() id: any; // Replace 'any' with your actual data model interface
 
-  form: ;
+  form!: Form;
   question_id!: string;
+  questions!: Questions;
+  choices!: string[];
+  isDataAvailable:boolean = false;
 
-  //choices: string[] = ['Choice 1', 'Choice 2', 'Choice 3']; // Add your choices here
-  //choice: string = '';
+  constructor(
+    private voteService: CastVoteService,
+    private route: ActivatedRoute,
+    ){
 
-
-  constructor(private router: Router, private voteService: CastVoteService) {}
+    }
 
   ngOnInit(): void {
-    this.voteService.getVoteDetails().subscribe((data) => {
-      this.results = data
+    const id = this.route.snapshot.paramMap.get('id');
+
+
+    this.voteService.getForm(id).subscribe((formData) => {
+      this.form = formData;
+      console.log(this.form);
+      this.question_id = this.form.Questions_ID;
     });
+
+
+    this.voteService.getQuestions(this.question_id).subscribe((qData) => {
+      this.questions = qData;
+      console.log(this.questions);
+      this.choices = new Array(this.questions.Questions.length);
+      this.isDataAvailable = true;
+      console.log(this.isDataAvailable);
+    });
+
+    while (this.isDataAvailable == false){
+      if (this.question_id != undefined){
+
+
+      }
+    }
+
   }
 
-  chooseAnswer(questionIndex: number, selectedAnswer: string) {
-    // Handle the logic for choosing an answer (e.g., update a response model)
-    // You may want to emit an event to notify the parent component about the selected answer
-  }
-
-  navigateToHomePage(){
-    // Replace this with actual credential validation
-    console.log('Submitted title:', this.choice);
-
-    this.router.navigate(['']);
+  submitResponse(submission: any){
+    console.log(submission);
   }
 }

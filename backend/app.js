@@ -354,14 +354,14 @@ app.post('/api/addResponse', async (req, res) => {
       { _id: response_id },
       {
         $addToSet: { //add to response with response_id
-          Responses: { $each: Responses }
+          Responses: { $each: Responses } // Responses: 1 response element as JSON obj
         }
       },
     );
   } catch (error) {
     res.status(500).json({ error: 'Could not update the response.' });
   }
-}); 
+});
 
 
 

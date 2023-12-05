@@ -8,3 +8,15 @@ export interface Form {
   Questions_ID: string,
   Responses_ID: string
 }
+
+export interface Questions {
+  Questions: Array<Question>
+}
+
+interface Question {
+  Parent_Form_ID: string,
+  Type: number,
+  Description: string,
+  Show_Top: number,
+  Options: Array<string>
+}
