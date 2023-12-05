@@ -16,7 +16,6 @@ import { Observable } from 'rxjs';
 export class CastVoteComponent {
 
   form!: Form;
-  question_id!: string;
   questions!: Questions;
   choices!: string[];
   isDataAvailable:number = 0;
@@ -33,10 +32,9 @@ export class CastVoteComponent {
     const id = this.route.snapshot.paramMap.get('id');
 
     this.voteService.getForm(id).subscribe((formData) => {
-      this.form = formData;
+      this.form = formData.form;
       console.log(this.form);
-      this.question_id = this.form.Questions_ID;
-
+      console.log(this.form.Description);
       this.isDataAvailable += 1;
     });
 
@@ -51,8 +49,19 @@ export class CastVoteComponent {
   }
 
   submitResponse(submission: any){
-    console.log(submission);
+    //console.log(submission);
+    //console.log(this.choices);
+    //console.log(this.form);
+    //console.log(this.form._id);
 
+    let response: Object = {
+      response_id: this.form.Responses_ID,
+      Responses: {
+        Parent_Form_ID: this.form._id,
+        Answers: this.choices
+      }};
 
+    console.log(response)
+    console.log(this.voteService.addResponse(response));
   }
 }
