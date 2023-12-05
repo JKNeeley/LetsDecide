@@ -1,9 +1,10 @@
 
-import { Component, Input } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { CastVoteService } from './cast-vote.service';
 import { NgModel } from '@angular/forms';
+import { Results, Questions } from '../results/results.model';
+import { fom}
 
 @Component({
   selector: 'app-cast-vote',
@@ -11,22 +12,20 @@ import { NgModel } from '@angular/forms';
   styleUrls: ['./cast-vote.component.css']
 })
 export class CastVoteComponent {
-  @Input() formData: any; // Replace 'any' with your actual data model interface
-  
-  title: string='';
-  description: string='';
-  question: string='';
-  choices: string[] = ['Choice 1', 'Choice 2', 'Choice 3']; // Add your choices here
-  choice: string = '';
+  //@Input() id: any; // Replace 'any' with your actual data model interface
+
+  form: ;
+  question_id!: string;
+
+  //choices: string[] = ['Choice 1', 'Choice 2', 'Choice 3']; // Add your choices here
+  //choice: string = '';
 
 
   constructor(private router: Router, private voteService: CastVoteService) {}
 
   ngOnInit(): void {
     this.voteService.getVoteDetails().subscribe((data) => {
-      this.title = data.title;
-      this.description = data.description;
-      this.question = data.question;
+      this.results = data
     });
   }
 
@@ -38,7 +37,7 @@ export class CastVoteComponent {
   navigateToHomePage(){
     // Replace this with actual credential validation
     console.log('Submitted title:', this.choice);
-    
+
     this.router.navigate(['']);
   }
 }

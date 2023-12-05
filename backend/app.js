@@ -75,6 +75,7 @@ app.get('/api/forms/:id', (req, res)=>{
   })
 })
 
+
 // Returns the details of a form of a specific ID
 app.get('/api/vote/details/:id', (req, res) => {
   formModel.findById(req.params.id)
@@ -96,6 +97,24 @@ app.get('/api/vote/details/:id', (req, res) => {
       res.status(500).send('Error fetching data');
     });
 });
+
+// Get Questions by ID
+app.get('/api/questions/:id', (req, res)=>{
+  formModel.findById(req.params.id).then(documents=>{
+    if (documents == null){
+      res.status(204).send('No document with this ID located')
+    }
+    else {
+      res.status(200).json({
+        Questions: documents
+      })
+    }
+  })
+  .catch((error) => {
+    console.log('Error fetching data: ', error);
+  })
+})
+
 
 /*results psuedocode
 get form info
@@ -257,7 +276,7 @@ app.post('/api/forms', async (req, res) => {
       Type: 0,
       State: 0,
       Time_Close: req.body.endTime, // date
-      Questions_ID: '0', 
+      Questions_ID: '0',
       Responses_ID: '0'
     });
     const savedForm = await newForm.save();
