@@ -8,7 +8,6 @@ COPY package.json /usr/src/app
 
 # RUN npm cache clean
 RUN npm install
-RUN npm install cors
 
 COPY . /usr/src/app
 EXPOSE 3000

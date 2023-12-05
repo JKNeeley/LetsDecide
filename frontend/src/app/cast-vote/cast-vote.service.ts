@@ -17,8 +17,8 @@ export class CastVoteService {
     return this.http.get<Form>(this.backend_url + 'api/forms/' + id);
   }
 
-  getQuestions(id: any): Observable<any> {
-    return this.http.get<Questions>(this.backend_url + 'api/questions/' + id);
+  getFormQuestions(id: any): Observable<any> {
+    return this.http.get<Questions>(this.backend_url + 'api/form/questions/' + id);
   }
 
   addResponse(response: any) {

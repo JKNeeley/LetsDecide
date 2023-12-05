@@ -3,7 +3,6 @@ const app = express();
 const path = require('path');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const cors = require('cors');
 
 app.use(express.static(path.join(__dirname, '../frontend/src')));
 
@@ -14,8 +13,6 @@ mongoose.connect('mongodb+srv://admin:oum6ZdhsYIFYEyuR@cluster0.5cmaqsn.mongodb.
   .catch(() => {
     console.log('Connection error');
   });
-
-app.use(cors());
 
 
 app.use(bodyParser.json())
@@ -75,40 +72,38 @@ app.get('/api/forms/:id', (req, res)=>{
   })
 })
 
-
-// Returns the details of a form of a specific ID
-app.get('/api/vote/details/:id', (req, res) => {
-  formModel.findById(req.params.id)
-    .then((document) => {
-      if (document === null) {
-        res.status(204).send('No document with this ID located');
-      } else {
-        // Modify this part based on your database structure
-        const voteDetails = {
-          title: document.Title,
-          description: document.Description,
-          question: document.Questions, // Modify accordingly based on your database structure
-        };
-        res.status(200).json(voteDetails);
-      }
-    })
-    .catch((error) => {
-      console.log('Error fetching data: ', error);
-      res.status(500).send('Error fetching data');
-    });
-});
-
 // Get Questions by ID
 app.get('/api/questions/:id', (req, res)=>{
-  formModel.findById(req.params.id).then(documents=>{
+  //console.log(req.params.id)
+  questionModel.findById(req.params.id).then(documents=>{
     if (documents == null){
       res.status(204).send('No document with this ID located')
     }
     else {
+      //console.log(documents);
       res.status(200).json({
-        Questions: documents
+        questions: documents
       })
     }
+  })
+  .catch((error) => {
+    console.log('Error fetching data: ', error);
+  })
+})
+
+//Get Questions by form ID
+app.get('/api/form/questions/:id', (req, res)=>{
+  formModel.findById(req.params.id).then(form =>{
+    questionModel.findById(form.Questions_ID).then(questions=>{
+      if (questions == null){
+        res.status(204).send('No document with this ID located')
+      }
+      else {
+        res.status(200).json({
+          questions: questions
+        })
+      }
+    })
   })
   .catch((error) => {
     console.log('Error fetching data: ', error);
