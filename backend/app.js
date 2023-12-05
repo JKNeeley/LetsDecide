@@ -3,6 +3,9 @@ const app = express();
 const path = require('path');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const cors = require('cors');
+
+app.use(cors);
 
 app.use(express.static(path.join(__dirname, '../frontend/src')));
 
