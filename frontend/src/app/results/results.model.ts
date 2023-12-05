@@ -6,8 +6,8 @@ export interface Results{
 
 export interface Questions{
   description: string,
-  winners: Array<Array<string>>,
-  count: Array<Array<counts>>
+  winners: Array<string>,
+  count: Array<counts>
 }
 
 interface counts{

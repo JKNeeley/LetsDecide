@@ -2,38 +2,6 @@ import { Component, Input, AfterViewInit } from '@angular/core';
 import Chart from 'chart.js/auto';
 import { Questions } from '../results/results.model';
 
-/*
-@Component({
-  selector: 'app-piechart',
-  templateUrl: './piechart.component.html',
-  styleUrls: ['./piechart.component.css']
-})
-
-//  rest of the code
-export class PiechartComponent implements OnInit {
-  constructor() { }
- ngOnInit(): void {
-    this.createChart();
-  }
-  public chart: any;
-
-  createChart(){
-
-    this.chart = new Chart("MyChart", {
-      type: 'pie', //this denotes tha type of chart
-      // type: 'doughnut',
-
-      data: {// values on X-Axis
-        labels: [],
-	       datasets: [
-          { label: "", data: [''],},
-          { label: "", data: [''],}]
-      },
-      options: { aspectRatio:2.5}
-    });}}
-
-*/
-
 @Component({
   selector: 'app-piechart',
   templateUrl: './piechart.component.html',
@@ -43,17 +11,75 @@ export class PiechartComponent implements AfterViewInit {
   @Input() question!: Questions;
   @Input() qnum!: Number;
 
+
   constructor() { }
 
   ngAfterViewInit(): void {
-    console.log(this.question.winners);
-    this.createChart(this.question, this.qnum);
+    Promise.resolve().then(() => {
+      this.createChart(this.question, this.qnum);
+    });
   }
 
   public chart: any;
   chart_json!: JSON;
 
+  createChart(question: Questions, qnum: Number) {
+    
+    //console.log(question);
+    const labels = question.count.map((option: any) => option[0].option);
+    const data = question.count.map((option: any) => option[0]?.votes || 0);
+
+    
+    const canvas = document.getElementById(qnum.toString()) as HTMLCanvasElement;
+    if (!canvas) {
+      console.error('Canvas not found');
+      return;
+    }
+  
+    const ctx = canvas.getContext('2d');
+    if (!ctx) {
+      console.error('Canvas context not found');
+      return;
+    }
+  
+    // Provide labels and data from before
+    this.chart = new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: question.description,
+            data: data,
+            backgroundColor: [
+              'rgb(31, 119, 180)',
+              'rgb(255, 127, 14)',
+              'rgb(44, 160, 44)',
+              'rgb(214, 39, 40)',
+              'rgb(148, 103, 189)',
+              'rgb(140, 86, 75)',
+              'rgb(227, 119, 194)',
+              'rgb(127, 127, 127)',
+            ],
+            hoverOffset: 4,
+          },
+        ],
+      },
+      options: {
+        aspectRatio: 1,
+      },
+    });
+  
+    //const topWinners = this.winners ? this.winners.slice(0, 3) : [];
+    //console.log(`Question ${qnum} Top 3 Winners:`, topWinners);
+    
+  }
+  
+  /*
   createChart(question : Questions, qnum: Number) {
+    console.log('This is the question, qnum: ',qnum, '\n', question);
+    
+    
     console.log(qnum.toString());
     var canvas = <HTMLCanvasElement> document.getElementById(qnum.toString());
     const ctx = canvas.getContext('2d');
@@ -110,5 +136,7 @@ export class PiechartComponent implements AfterViewInit {
         }
       }
     });
+    
   }
+  */
 }

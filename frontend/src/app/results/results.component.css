@@ -1,3 +1,58 @@
 .home-page {
   flex-direction: column;
 }
+
+.results-container {
+  flex-direction: column;
+  text-align: center;
+  padding: 20px;
+}
+
+.results-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.piechart-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.question-container {
+  margin-bottom: 20px;
+}
+
+.question-box {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.question-description {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.piechart-box {
+  border-top: 1px solid #ccc;
+  padding-top: 20px;
+}
+
+.winners-container {
+  margin-top: 10px;
+}
+
+.winners-container ul {
+  list-style: none;
+  padding: 0;
+}
+
+.winners-container li {
+  margin-bottom: 5px;
+  font-size: 14px;
+}
