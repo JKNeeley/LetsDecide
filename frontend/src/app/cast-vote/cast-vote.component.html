@@ -1,15 +1,17 @@
 <main class="form-page">
   <div>
-    <h1>{{ title }}</h1>
-    <p>{{ description }}</p>
+    <h1>{{ results.title }}</h1>
+    <p>{{ results.description }}</p>
     <form>
-      <div class="form-container">
-        <p>{{ question }}</p>
-        <label for="choice">Your Choice: </label>
-        <!-- Replace the text input with a dropdown/select element -->
-        <select id="choice" [(ngModel)]="choice" name="choice" required>
-          <option *ngFor="let option of choices" [value]="option">{{ option }}</option>
-        </select>
+      <div *ngFor="let question of results.questions;">
+        <div class="form-container">
+          <p>{{ question.description }}</p>
+          <label for="choice">Your Choice: </label>
+          <!-- Replace the text input with a dropdown/select element -->
+          <select id="choice" [(ngModel)]="choice" name="choice" required>
+            <option *ngFor="let option of choices" [value]="option">{{ option }}</option>
+          </select>
+        </div>
       </div>
       <br>
       <br>

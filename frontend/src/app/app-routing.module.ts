@@ -14,8 +14,8 @@ const routes: Routes = [
   { path: '', component: HomePageComponent },
   { path: 'create-voting-form', component: CreateVotingFormComponent },
   { path: 'create-room-vote', component: CreateRoomVoteComponent },
-  { path: 'cast-vote:formData', component: CastVoteComponent },
-  { path: 'cast-local:formData', component: CastLocalComponent },
+  { path: 'cast-vote/:id', component: CastVoteComponent },
+  { path: 'cast-local/:id', component: CastLocalComponent },
   { path: 'piechart/:id', component: PiechartComponent},
   { path: 'results/:id', component: ResultsComponent}
 ];
