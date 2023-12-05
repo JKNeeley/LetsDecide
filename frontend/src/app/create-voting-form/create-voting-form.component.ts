@@ -75,36 +75,56 @@ parseAnswers(question: Question) {
   
   //Form
   onFormCreation(form: any) {
-  console.log(form);
-  let parent_id, response_id, question_id;
-  this.formService.saveForm(form).subscribe(
-    (response) => {
-      parent_id = response.savedFormId;
-      console.log('Form sent successfully:', parent_id);
-      this.saveResponses(parent_id);
-      this.saveQuestions(parent_id, form);
-
-
-    }
-  );
+    console.log(form);
+    let parent_id: string, response_id: string | undefined, question_id: string | undefined;
   
-}
-
-
-  //Response
-  saveResponses(ID: string){
-    let response_id = -1;
-    return this.formService.saveResponses(ID).subscribe(
-    (response) => {
-      response_id = response.savedResponse;
-      console.log('Response sent successfully:', response_id);
-    }
-  );
+    this.formService.saveForm(form).subscribe(
+      async (response) => {
+        parent_id = response.savedFormId;
+        console.log('Form sent successfully:', parent_id);
+        
+        try {
+          const savedResponse: any = await this.saveResponses(parent_id);
+          response_id = savedResponse?.savedResponseId?.toString();
+        } catch (error) {
+          console.error('Error while saving responses:', error);
+        }
+  
+        try {
+          const savedQuestion: any = await this.saveQuestions(parent_id, form);
+          question_id = savedQuestion?.savedQuestionId?.toString();
+        } catch (error){console.error('Error while saving questions:', error);}
+  
+        try {
+          const response_id_validated = response_id ? response_id : '';
+          const question_id_validated = question_id ? question_id : '';
+          await this.formService.updateFormWithIDs(parent_id!, response_id_validated, question_id_validated).toPromise();
+          console.log('Form updated with IDs:', parent_id, response_id, question_id);
+          
+        }
+        catch (error) {console.error('Error while updating form:', error);}
+      
+        
+      
+      },
+      (error) => {
+        console.error('Error while saving form:', error);
+      }
+    );
   }
-
-
-   saveQuestions(ID: string, form: any){
-    let question_id = -1;
+  
+  
+  async saveResponses(ID: string): Promise<string> {
+    try {
+      const response = await this.formService.saveResponses(ID).toPromise();
+      return await response;
+    } catch (error) {
+      // Handle errors here if needed
+      console.error('Error while saving responses:', error);
+      throw error;
+    }
+  }
+  async saveQuestions(ID: string, form: any): Promise<string>{
     const questions: QuestionStore = {
       Questions: []
     };
@@ -125,19 +145,16 @@ parseAnswers(question: Question) {
       questions.Questions.push(question);
       questionNumber++;
     }
-    this.formService.saveQuestions(questions).subscribe(
-      (response) => {
-        question_id = response?.savedResponse?._id;
-        //console.log("Q: ", response);
-        console.log(question_id);
-      },
-      (error: any) => {
-        console.error('Error sending response:', error);
-      }
-    );
-    return question_id;
-   } 
-
+    try {
+      const response = await this.formService.saveQuestions(questions).toPromise();
+      return await response;
+    } catch (error) {
+      console.error('Error while saving questions:', error);
+      throw error;
+    }
+    
+  } 
+  
   //this.navigateToHomePage();
   navigateToHomePage() {
     this.router.navigate(['/']);

@@ -5,6 +5,8 @@ import { CreateVotingFormComponent } from './create-voting-form/create-voting-fo
 import { CreateRoomVoteComponent } from './create-room-vote/create-room-vote.component';
 import { CastVoteComponent } from './cast-vote/cast-vote.component';
 import { CastLocalComponent } from './cast-local/cast-local.component';
+import { PiechartComponent } from './piechart/piechart.component';
+import { ResultsComponent } from './results/results.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -14,6 +16,8 @@ const routes: Routes = [
   { path: 'create-room-vote', component: CreateRoomVoteComponent },
   { path: 'cast-vote:formData', component: CastVoteComponent },
   { path: 'cast-local:formData', component: CastLocalComponent },
+  { path: 'piechart/:id', component: PiechartComponent},
+  { path: 'results/:id', component: ResultsComponent}
 ];
 
 @NgModule({

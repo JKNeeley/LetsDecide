@@ -8,6 +8,7 @@ COPY package.json /usr/src/app
 # RUN npm cache clean
 
 RUN npm install
+RUN npm install chart.js
 
 COPY . /usr/src/app
 RUN npm run build
