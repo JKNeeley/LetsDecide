@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { CastVoteService } from 'app/cast-vote/cast-vote.service';
-import { Form } from 'app/cast-vote/form.model';
+import { CastVoteService } from '../cast-vote/cast-vote.service';
+import { Form } from '../cast-vote/form.model';
 
 @Component({
   selector: 'app-vote-form-id-popup',
