@@ -5,6 +5,8 @@ import { CastVoteService } from './cast-vote.service';
 import { NgModel } from '@angular/forms';
 import { Results } from '../results/results.model';
 import { Form, Questions } from './form.model';
+import { concatWith } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-cast-vote',
@@ -14,10 +16,10 @@ import { Form, Questions } from './form.model';
 export class CastVoteComponent {
 
   form!: Form;
-  question_id!: string;
   questions!: Questions;
   choices!: string[];
-  isDataAvailable:boolean = false;
+  isDataAvailable:number = 0;
+
 
   constructor(
     private voteService: CastVoteService,
@@ -29,32 +31,37 @@ export class CastVoteComponent {
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
 
-
     this.voteService.getForm(id).subscribe((formData) => {
-      this.form = formData;
+      this.form = formData.form;
       console.log(this.form);
-      this.question_id = this.form.Questions_ID;
+      console.log(this.form.Description);
+      this.isDataAvailable += 1;
     });
 
-
-    this.voteService.getQuestions(this.question_id).subscribe((qData) => {
-      this.questions = qData;
+    this.voteService.getFormQuestions(id).subscribe((qData) => {
+      this.questions = qData.questions;
       console.log(this.questions);
       this.choices = new Array(this.questions.Questions.length);
-      this.isDataAvailable = true;
-      console.log(this.isDataAvailable);
+
+      this.isDataAvailable += 1;
     });
-
-    while (this.isDataAvailable == false){
-      if (this.question_id != undefined){
-
-
-      }
-    }
 
   }
 
   submitResponse(submission: any){
-    console.log(submission);
+    //console.log(submission);
+    //console.log(this.choices);
+    //console.log(this.form);
+    //console.log(this.form._id);
+
+    let response: Object = {
+      response_id: this.form.Responses_ID,
+      Responses: {
+        Parent_Form_ID: this.form._id,
+        Answers: this.choices
+      }};
+
+    console.log(response)
+    console.log(this.voteService.addResponse(response));
   }
 }

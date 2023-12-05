@@ -1,5 +1,5 @@
 <main class="form-page">
-  <div class="home-page" *ngIf="isDataAvailable">
+  <div class="home-page" *ngIf="isDataAvailable == 2">
     <h1>{{ form.Title }}</h1>
     <p>{{ form.Description }}</p>
     <form #responseSubmission="ngForm">
@@ -16,7 +16,7 @@
       <br>
       <br>
       <div>
-        <button class="button" (click)="submitResponse(responseSubmission.value)">Submit Vote</button>
+        <button class="button" (click)="submitResponse(responseSubmission)">Submit Vote</button>
       </div>
     </form>
   </div>
