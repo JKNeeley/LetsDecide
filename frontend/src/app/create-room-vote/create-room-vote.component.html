@@ -1,7 +1,7 @@
 <main class="form-page">
     <div>
         <h1>What are you voting on?</h1>
-        <form>
+        <form #formSubmission="ngForm">
             <h2>Step 1: Create your voting form.</h2>
             <div class="form-container">
                 <div>
@@ -38,7 +38,7 @@
             <br>
             <div>
                 <h2>Step 2: Start voting!</h2>
-                <button class="button" (click)="navigateToCastVote(4)">Start</button>
+                <button class="button" (click)="onVoteCreation(formSubmission.value)">Start</button>
             </div>
             </form>
     </div>

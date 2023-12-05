@@ -1,21 +1,24 @@
 <main class="form-page">
     <div>
-        <h1>(Vote Title)</h1>
-        <p>(Vote Description)</p>
-        <form>
-            <div class="form-container">
-                <p>(Vote Question)</p>
-                <label for="choice">Your Choice: </label>
-                <input type="text" id="choice" [(ngModel)]="choice" name="choice" required>
-            </div>
-            <br>
-            <br>
-            <div>
-                <button class="button" (click)="navigateToCastLocal()">Vote</button>
-                <br>
-
-                <button class="button" (click)="navigateToHomePage()">End</button>
-            </div>
-            </form>
+      <h1>{{ title }}</h1>
+      <p>{{ description }}</p>
+      <form>
+        <div class="form-container">
+          <p>{{ question }}</p>
+          <label for="choice">Your Choice: </label>
+          <!-- Replace the text input with a dropdown/select element -->
+          <select id="choice" [(ngModel)]="choice" name="choice" required>
+            <option *ngFor="let option of choices" [value]="option">{{ option }}</option>
+          </select>
+        </div>
+        <br>
+        <br>
+        <div>
+          <button class="button" (click)="navigateToCastLocal()">Vote</button>
+          <br>
+          <button class="button" (click)="navigateToHomePage()">End</button>
+        </div>
+      </form>
     </div>
-</main>
+  </main>
+  

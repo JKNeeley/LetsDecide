@@ -1,6 +1,12 @@
+
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+import { CastVoteService } from './cast-vote.service';
+import { NgModel } from '@angular/forms';
+import { Results } from '../results/results.model';
+import { Form, Questions } from './form.model';
+import { concatWith } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-cast-vote',
@@ -8,18 +14,54 @@ import { Router } from '@angular/router';
   styleUrls: ['./cast-vote.component.css']
 })
 export class CastVoteComponent {
-  choice: string='';
+
+  form!: Form;
+  questions!: Questions;
+  choices!: string[];
+  isDataAvailable:number = 0;
 
 
-  showSaveCredentialsPopup = false;
+  constructor(
+    private voteService: CastVoteService,
+    private route: ActivatedRoute,
+    ){
 
-  constructor(private router: Router) {}
+    }
 
-  navigateToCastVote(){
+  ngOnInit(): void {
+    const id = this.route.snapshot.paramMap.get('id');
 
-    // Replace this with actual credential validation
-    console.log('Submitted title:', this.choice);
-    
-    this.router.navigate(['']);
+    this.voteService.getForm(id).subscribe((formData) => {
+      this.form = formData.form;
+      console.log(this.form);
+      console.log(this.form.Description);
+      this.isDataAvailable += 1;
+    });
+
+    this.voteService.getFormQuestions(id).subscribe((qData) => {
+      this.questions = qData.questions;
+      console.log(this.questions);
+      this.choices = new Array(this.questions.Questions.length);
+
+      this.isDataAvailable += 1;
+    });
+
+  }
+
+  submitResponse(submission: any){
+    //console.log(submission);
+    //console.log(this.choices);
+    //console.log(this.form);
+    //console.log(this.form._id);
+
+    let response: Object = {
+      response_id: this.form.Responses_ID,
+      Responses: {
+        Parent_Form_ID: this.form._id,
+        Answers: this.choices
+      }};
+
+    console.log(response)
+    console.log(this.voteService.addResponse(response));
   }
 }

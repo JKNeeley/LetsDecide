@@ -42,7 +42,6 @@ interface Response {
 
 
 
-
 export class CreateVotingFormComponent {
   
   title: string = '';
@@ -71,6 +70,7 @@ parseAnswers(question: Question) {
 }
 
   showSaveCredentialsPopup = false;
+  showVoteFormIdPopup = false;
 
   constructor(private router: Router, private formService: FormService) {}
   
@@ -112,6 +112,8 @@ parseAnswers(question: Question) {
         console.error('Error while saving form:', error);
       }
     );
+
+    this.showVoteFormIdPopup = true;
   }
   
   
@@ -161,7 +163,7 @@ parseAnswers(question: Question) {
     this.router.navigate(['/']);
   }
 
-  }
+}
 
   
  

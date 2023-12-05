@@ -1,18 +1,23 @@
 <main class="form-page">
-    <div>
-        <h1>(Vote Title)</h1>
-        <p>(Vote Description)</p>
-        <form>
-            <div class="form-container">
-                <p>(Vote Question)</p>
-                <label for="choice">Your Choice: </label>
-                <input type="text" id="choice" [(ngModel)]="choice" name="choice" required>
-            </div>
-            <br>
-            <br>
-            <div>
-                <button class="button" (click)="navigateToCastVote()">Vote</button>
-            </div>
-            </form>
-    </div>
+  <div class="home-page" *ngIf="isDataAvailable == 2">
+    <h1>{{ form.Title }}</h1>
+    <p>{{ form.Description }}</p>
+    <form #responseSubmission="ngForm">
+      <div *ngFor="let question of questions.Questions; index as index">
+        <div class="form-container">
+          <p>{{ question.Description }}</p>
+          <label for="choice">Your Choice: </label>
+          <!-- Replace the text input with a dropdown/select element -->
+          <select id="choice{{index}}" [(ngModel)]="choices[index]" name="choice" required>
+            <option *ngFor="let option of question.Options" [value]="option">{{ option }}</option>
+          </select>
+        </div>
+      </div>
+      <br>
+      <br>
+      <div>
+        <button class="button" (click)="submitResponse(responseSubmission)">Submit Vote</button>
+      </div>
+    </form>
+  </div>
 </main>

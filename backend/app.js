@@ -1,29 +1,19 @@
-const express = require('express')
-const app = express()
+const express = require('express');
+const app = express();
 const path = require('path');
-const mongoose = require('mongoose')
-const bodyParser = require('body-parser')
-const cors = require('cors');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
 
 app.use(express.static(path.join(__dirname, '../frontend/src')));
 
 mongoose.connect('mongodb+srv://admin:oum6ZdhsYIFYEyuR@cluster0.5cmaqsn.mongodb.net/letsdecide?retryWrites=true&w=majority')
-//mongoose.connect('mongodb+srv://admin:oum6ZdhsYIFYEyuR@cluster0.5cmaqsn.mongodb.net/letsdecidetest?retryWrites=true&w=majority')
-  .then(()=>{
-    console.log('Connected to database')
+  .then(() => {
+    console.log('Connected to database');
   })
-  .catch(()=>{
-    console.log('connection error')
-})
+  .catch(() => {
+    console.log('Connection error');
+  });
 
-
-app.use(cors());
-
-const formModel = require('./models/form')
-const questionModel = require('./models/question')
-const responseModel = require('./models/response')
-const accessModel = require('./models/access')
-const resultsModel = require('./models/results')
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:false}))
@@ -40,6 +30,12 @@ app.use((req, res, next)=>{
   next();
 })
 
+const formModel = require('./models/form')
+const questionModel = require('./models/question')
+const responseModel = require('./models/response')
+const accessModel = require('./models/access');
+const resultsModel = require('./models/results');
+const form = require('./models/form');
 
 /// Define routes here ///
 
@@ -76,6 +72,45 @@ app.get('/api/forms/:id', (req, res)=>{
   })
 })
 
+// Get Questions by ID
+app.get('/api/questions/:id', (req, res)=>{
+  //console.log(req.params.id)
+  questionModel.findById(req.params.id).then(documents=>{
+    if (documents == null){
+      res.status(204).send('No document with this ID located')
+    }
+    else {
+      //console.log(documents);
+      res.status(200).json({
+        questions: documents
+      })
+    }
+  })
+  .catch((error) => {
+    console.log('Error fetching data: ', error);
+  })
+})
+
+//Get Questions by form ID
+app.get('/api/form/questions/:id', (req, res)=>{
+  formModel.findById(req.params.id).then(form =>{
+    questionModel.findById(form.Questions_ID).then(questions=>{
+      if (questions == null){
+        res.status(204).send('No document with this ID located')
+      }
+      else {
+        res.status(200).json({
+          questions: questions
+        })
+      }
+    })
+  })
+  .catch((error) => {
+    console.log('Error fetching data: ', error);
+  })
+})
+
+
 /*results psuedocode
 get form info
 get question info
@@ -89,7 +124,7 @@ assign Results.Question[forEach]
   count
 */
 
-// Returns the Results of a form of a specific ID
+// Returns the results of a form of a specific ID
 // WIP, only supports First-Past-The-Post
 app.get('/api/forms/result/:id', (req, res)=>{
   console.log('/api/forms/result/:id')
@@ -236,7 +271,7 @@ app.post('/api/forms', async (req, res) => {
       Type: 0,
       State: 0,
       Time_Close: req.body.endTime, // date
-      Questions_ID: '0', 
+      Questions_ID: '0',
       Responses_ID: '0'
     });
     const savedForm = await newForm.save();
@@ -302,6 +337,26 @@ app.post('/api/responses', async (req, res) => {
   } catch (error) {
     console.error('Error saving responses:', error);
     res.status(500).send('Error saving responses');
+  }
+});
+
+
+app.post('/api/addResponse', (req, res) => {
+  console.log('add resp');
+  const { response_id, Responses } = req.body;
+  console.log(req.body);
+  try {
+    Responses.findOneAndUpdate(
+      { _id: response_id },
+      {
+        $addToSet: { //add to response with response_id
+          Responses: { $each: Responses } // Responses: 1 response element as JSON obj
+        }
+      },
+    );
+    res.status(200).send('OK');
+  } catch (error) {
+    res.status(500).json({ error: 'Could not update the response.' });
   }
 });
 

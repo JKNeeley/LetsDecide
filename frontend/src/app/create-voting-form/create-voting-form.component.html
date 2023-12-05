@@ -1,31 +1,31 @@
 <main class="form-page">
-  <div>
-      <h1>What are you voting on?</h1>
-      <form #fromSubmission="ngForm">
-          <h2>Step 1: Create your voting form.</h2>
-          <div class="form-container">
-              <div>
-                  <label for="title">Title:</label>
-                  <br>
-                  <input type="text" id="title" [(ngModel)]="title" name="title" required>
-              </div>
-              <br>
-              <div>
-                  <label for="description">Description:</label>
-                  <br>
-                  <input type="text" id="description" [(ngModel)]="description" name="description" required>
-              </div>
-              <br>
-              <div>
-                  <label for="endTime">End Time:</label>
-                  <br>
-                  <input type="datetime-local" id="endTime" [(ngModel)]="endTime" name="endTime" required>
-              </div>
-              <br>
-              <div *ngFor="let question of questions; let i = index">
-                  <!-- Each question -->
-                  <h2>Question {{ i + 1 }}</h2>
-                  <div class="form-container">
+    <div>
+        <h1>What are you voting on?</h1>
+        <form #formSubmission="ngForm">
+            <h2>Step 1: Create your voting form.</h2>
+            <div class="form-container">
+                <div>
+                    <label for="title">Title:</label>
+                    <br>
+                    <input type="text" id="title" [(ngModel)]="title" name="title" required>
+                </div>
+                <br>
+                <div>
+                    <label for="description">Description:</label>
+                    <br>
+                    <input type="text" id="description" [(ngModel)]="description" name="description" required>
+                </div>
+                <br>
+                <div>
+                    <label for="endTime">End Time:</label>
+                    <br>
+                    <input type="datetime-local" id="endTime" [(ngModel)]="endTime" name="endTime" required>
+                </div>
+                <br>
+                <div *ngFor="let question of questions; let i = index">
+                    <!-- Each question -->
+                    <h2>Question {{ i + 1 }}</h2>
+                    <div class="form-container">
                       <!-- Your form inputs for each question -->
                       <div>
                           <label for="title{{ i }}">Title:</label>
@@ -53,13 +53,12 @@
               <br>
           </div>
           <br>
-          <br>
           <div>
               <h2>Step 2: Start voting!</h2>
-              <button class="button" (click)="onFormCreation(fromSubmission.value)">Start</button>
-              <br>
-              <button class="button" (click)="showSaveCredentialsPopup = true">Save</button>
-              <app-save-credentials-popup *ngIf="showSaveCredentialsPopup"></app-save-credentials-popup>
+              <button class="button" (click)="onFormCreation(formSubmission.value)">Start</button>
+          </div>
+          <div>
+            <app-vote-form-id-popup *ngIf="showVoteFormIdPopup"></app-vote-form-id-popup>
           </div>
       </form>
   </div>
