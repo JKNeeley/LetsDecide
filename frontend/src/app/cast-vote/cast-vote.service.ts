@@ -23,8 +23,8 @@ export class CastVoteService {
   addResponse(response: any) {
     //console.log('what');
     console.log(response);
-    console.log(this.backend_url + 'api/addResponse');
-    return this.http.post<any>(this.backend_url + 'api/addResponse', null);
+    //console.log(this.backend_url + 'api/addResponse');
+    return this.http.post<any>(this.backend_url + 'api/addResponse', response);
   }
 
 }

@@ -344,22 +344,27 @@ app.post('/api/responses', async (req, res) => {
 });
 
 
-app.post('/api/addResponse', (req, res) => {
+app.post('/api/addResponse', async (req, res) => {
   console.log('add resp');
   const { response_id, Responses } = req.body;
-  console.log(req.body);
+
   try {
-    Responses.findOneAndUpdate(
-      { _id: response_id },
-      {
-        $addToSet: { //add to response with response_id
-          Responses: { $each: Responses } // Responses: 1 response element as JSON obj
-        }
-      },
-    );
-    res.status(200).send('OK');
+    const foundObject = await responseModel.findById(response_id);// Find response object by ID
+
+    if (!foundObject) {
+      console.log('not found');
+      return res.status(404).json({ error: 'Object not found' });
+    }
+
+    // Once object is found push response to the response array in the object
+    foundObject.Responses.push(Responses);
+    const updatedObject = await foundObject.save();
+
+    console.log('Updated object:', updatedObject);
+    res.status(200).json({ updatedObject });
   } catch (error) {
-    res.status(500).json({ error: 'Could not update the response.' });
+    console.error('Error while saving:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 

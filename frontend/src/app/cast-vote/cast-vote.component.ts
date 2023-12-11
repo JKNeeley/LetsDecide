@@ -49,11 +49,6 @@ export class CastVoteComponent {
   }
 
   submitResponse(submission: any){
-    //console.log(submission);
-    //console.log(this.choices);
-    //console.log(this.form);
-    //console.log(this.form._id);
-
     let response: Object = {
       response_id: this.form.Responses_ID,
       Responses: {
@@ -61,7 +56,7 @@ export class CastVoteComponent {
         Answers: this.choices
       }};
 
-    console.log(response)
-    console.log(this.voteService.addResponse(response));
+    //add response to database
+    this.voteService.addResponse(response).subscribe((qData) => {});
   }
 }
