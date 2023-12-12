@@ -325,24 +325,21 @@ app.post('/api/questions', async (req, res) => {
   }
 });
 
-
-
-
-
 app.post('/api/responses', async (req, res) => {
-  console.log("Got to responses");
+  // Calls this post request when first creating a form
+  // Creates new Response object to store responses and links to parent form
   try {
     const newResponse = new responseModel({ Responses: req.body });
     const savedResponse = await newResponse.save();
     const savedResponseId = savedResponse._id
-    console.log(savedResponseId)
+    
+    // Send back response id to add to parent form
     res.status(200).json({ savedResponseId });
   } catch (error) {
     console.error('Error saving responses:', error);
     res.status(500).send('Error saving responses');
   }
 });
-
 
 app.post('/api/addResponse', async (req, res) => {
   console.log('add resp');
@@ -360,17 +357,12 @@ app.post('/api/addResponse', async (req, res) => {
     foundObject.Responses.push(Responses);
     const updatedObject = await foundObject.save();
 
-    console.log('Updated object:', updatedObject);
     res.status(200).json({ updatedObject });
   } catch (error) {
     console.error('Error while saving:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
-
-
-
-
 
 app.post('/api/access', (req, res) => {
   const accessData = req.body.access[0];
@@ -384,13 +376,13 @@ app.post('/api/access', (req, res) => {
       Voted: accessData.Voted
   }
 
+  // Store values above with corressponding accessModel
   let access = new accessModel(
     {
       Access: values
     });
 
-  //res.send(access);
-
+  // Store values in database
   access.save()
   .then(() => {
     res.send('Data saved')

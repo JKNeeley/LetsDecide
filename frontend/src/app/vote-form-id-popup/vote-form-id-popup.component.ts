@@ -9,7 +9,7 @@ import { Form } from '../cast-vote/form.model';
   styleUrls: ['./vote-form-id-popup.component.css']
 })
 export class VoteFormIdPopupComponent {
-  @Input() form: Form | undefined;
+  @Input() form: String | undefined;
   isDataAvailable:boolean = false;
 
   constructor(
