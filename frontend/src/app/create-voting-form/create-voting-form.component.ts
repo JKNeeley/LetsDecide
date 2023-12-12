@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { FormService } from './create-voting-form.service'
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
+import { Form } from 'app/cast-vote/form.model';
 
 
 
@@ -43,6 +44,8 @@ interface Response {
 
 
 export class CreateVotingFormComponent {
+
+  form: Form | undefined;
   
   title: string = '';
   description: string = '';
@@ -113,6 +116,7 @@ parseAnswers(question: Question) {
       }
     );
 
+    this.form = form;
     this.showVoteFormIdPopup = true;
   }
   
