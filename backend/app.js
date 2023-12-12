@@ -369,6 +369,22 @@ app.post('/api/addResponse', async (req, res) => {
   }
 });
 
+app.put('/api/forms/end-vote', async (req, res) => {
+  const formId = req.body.formId;
+
+  // Find form by parent form id, then switch State to 2 to indicate vote it over
+  try {
+    const updatedForm = await formModel.findByIdAndUpdate(formId, { State: 2 }, { new: true });
+
+    if (!updatedForm) {
+      return res.status(404).json({ message: 'Form not found' });
+    }
+  } catch (error) {
+    console.error('Error updating form:', error);
+    return res.status(500).json({ message: 'Internal server error', error: error.message });
+  }
+});
+
 
 
 
