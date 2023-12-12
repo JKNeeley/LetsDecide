@@ -49,14 +49,16 @@ export class CastVoteComponent {
   }
 
   submitResponse(submission: any){
+    const transformedAnswers = this.choices.map(item => [item]);
     let response: Object = {
       response_id: this.form.Responses_ID,
       Responses: {
         Parent_Form_ID: this.form._id,
-        Answers: this.choices
+        Answers: transformedAnswers
       }};
 
+    //console.log(response);
     //add response to database
-    this.voteService.addResponse(response).subscribe((qData) => {});
+    this.voteService.addResponse(response).subscribe();
   }
 }

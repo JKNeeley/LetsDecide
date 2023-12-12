@@ -345,8 +345,9 @@ app.post('/api/responses', async (req, res) => {
 
 
 app.post('/api/addResponse', async (req, res) => {
-  console.log('add resp');
+  //console.log('add resp');
   const { response_id, Responses } = req.body;
+  console.log('Responses: \n\n',Responses);
 
   try {
     const foundObject = await responseModel.findById(response_id);// Find response object by ID
@@ -360,7 +361,7 @@ app.post('/api/addResponse', async (req, res) => {
     foundObject.Responses.push(Responses);
     const updatedObject = await foundObject.save();
 
-    console.log('Updated object:', updatedObject);
+    //console.log('Updated object:', updatedObject);
     res.status(200).json({ updatedObject });
   } catch (error) {
     console.error('Error while saving:', error);
