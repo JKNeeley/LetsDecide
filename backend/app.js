@@ -342,8 +342,9 @@ app.post('/api/responses', async (req, res) => {
 });
 
 app.post('/api/addResponse', async (req, res) => {
-  console.log('add resp');
+  //console.log('add resp');
   const { response_id, Responses } = req.body;
+  console.log('Responses: \n\n',Responses);
 
   try {
     const foundObject = await responseModel.findById(response_id);// Find response object by ID
