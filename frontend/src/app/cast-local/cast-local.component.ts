@@ -42,9 +42,11 @@ export class CastLocalComponent {
 
     this.voteService.getForm(id).subscribe((formData) => {
       this.form = formData.form;
-      //console.log(this.form);
-      console.log(this.form.Title);
-      console.log(this.form.Description);
+      
+      if(this.voteEnded() == -1 || this.form.State == 2){ this.endLocalVote();return;}// Voting time has passed or the vote is already over
+
+      if(this.form.State == 0){ return; }// Form is not in the 'ready to be voted on state' display nothing
+
       this.isDataAvailable += 1;
     });
 
@@ -52,7 +54,7 @@ export class CastLocalComponent {
       this.questions = qData.questions;
       console.log(this.questions);
       this.choices = new Array(this.questions.Questions.length);
-
+      
       this.isDataAvailable += 1;
     });
 
@@ -67,7 +69,9 @@ export class CastLocalComponent {
         Answers: transformedAnswers
       }};
 
-     //add response to database
+    if(this.voteEnded() == -1){ this.endLocalVote();return;}
+    
+    //add response to database
     this.voteService.addResponse(response).subscribe();
 
     //reset form field answers due to local voting
@@ -75,7 +79,19 @@ export class CastLocalComponent {
   }
 
   endLocalVote(){
+
+    this.voteService.endVote(this.form._id);// Set form State to 2    
     const url = '../results/' + this.form._id
     this.router.navigate([url]);
   }
+
+  voteEnded()
+  {
+    // Check to see if current time is past the end time of the form | must convert Time_Close to a Date to use .getTime() and compare
+    const currentTime: Date = new Date();
+    const formTimeClose: Date = this.form.Time_Close instanceof Date ? this.form.Time_Close : new Date(this.form.Time_Close);
+    if(currentTime.getTime() > formTimeClose.getTime()) { return -1;} // Past Time_Close
+    return 0;// Before Time_Close
+  }
+
 }

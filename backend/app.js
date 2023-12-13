@@ -267,18 +267,21 @@ function getWinners(quest, count){
 
 //Create Vote Form
 app.post('/api/forms', async (req, res) => {
+  // Create new form
   try {
     const newForm = new formModel({
       Title: req.body.title,
       Description: req.body.description,
       Type: 0,
-      State: 0,
-      Time_Close: req.body.endTime, // date
-      Questions_ID: '0',
-      Responses_ID: '0'
+      State: 1,
+      Time_Close: req.body.endTime,
+      Questions_ID: '0', // These will be updated later
+      Responses_ID: '0'  // These will be updated later
     });
     const savedForm = await newForm.save();
-    //console.log('Form saved successfully:', savedForm);
+    
+    // Send form_id created automatically through MongoDB when creating new object
+    // form_id will be used from Quetsion and Response object creation
     const savedFormId = savedForm._id;
     res.json({ savedFormId });
   } catch (err) {
@@ -291,6 +294,7 @@ app.put('/api/forms/:formId/update', async (req, res) => {
   const formId = req.params.formId;
   const { responseId, questionId } = req.body;
 
+  // Update form by id, linking form with corresponding new Question and Response objects
   try {
     const updatedForm = await formModel.findByIdAndUpdate(
       formId,
@@ -302,6 +306,30 @@ app.put('/api/forms/:formId/update', async (req, res) => {
       return res.status(404).json({ error: 'Form not found' });
     }
 
+    // Sends the entire updated form back
+    res.status(200).json({ message: 'Form updated successfully', updatedForm });
+  } catch (error) {
+    console.error('Error updating form:', error);
+    res.status(500).json({ error: 'Failed to update form' });
+  }
+});
+
+app.put('/api/forms/:formId/end-vote', async (req, res) => {
+  const formId = req.params.formId;
+
+  // Update form by id, state State to 2 indicating vote it over
+  try {
+    const updatedForm = await formModel.findByIdAndUpdate(
+      formId,
+      { $set: { State: 2 } },
+      { new: true }
+    );
+
+    if (!updatedForm) {
+      return res.status(404).json({ error: 'Form not found' });
+    }
+
+    // Sends the entire updated form back
     res.status(200).json({ message: 'Form updated successfully', updatedForm });
   } catch (error) {
     console.error('Error updating form:', error);
@@ -310,14 +338,16 @@ app.put('/api/forms/:formId/update', async (req, res) => {
 });
 
 
-
 //Create Questions
 app.post('/api/questions', async (req, res) => {
   try {
+      // Make new Question object with the parent_form_id
       const newQuestion = new questionModel();
       newQuestion.Questions = req.body.Questions;
       const savedQuestion = await newQuestion.save();
       const savedQuestionId = savedQuestion._id;
+      
+      // Send object_id of new Question object
       res.status(200).json({ savedQuestionId });
   } catch (error) {
       console.error('Error saving questions:', error);
@@ -330,12 +360,13 @@ app.post('/api/questions', async (req, res) => {
 
 
 app.post('/api/responses', async (req, res) => {
-  console.log("Got to responses");
   try {
-    const newResponse = new responseModel({ Responses: req.body });
+    // Make new Response object with the parent_form_id given
+    const newResponse = new responseModel();
     const savedResponse = await newResponse.save();
     const savedResponseId = savedResponse._id
-    console.log(savedResponseId)
+
+    // Send object_id of new Response object
     res.status(200).json({ savedResponseId });
   } catch (error) {
     console.error('Error saving responses:', error);
@@ -347,8 +378,7 @@ app.post('/api/responses', async (req, res) => {
 app.post('/api/addResponse', async (req, res) => {
   //console.log('add resp');
   const { response_id, Responses } = req.body;
-  console.log('Responses: \n\n',Responses);
-
+  
   try {
     const foundObject = await responseModel.findById(response_id);// Find response object by ID
 
@@ -388,7 +418,7 @@ app.put('/api/forms/end-vote', async (req, res) => {
 
 
 
-
+// Not in use currently
 app.post('/api/access', (req, res) => {
   const accessData = req.body.access[0];
 
@@ -405,8 +435,6 @@ app.post('/api/access', (req, res) => {
     {
       Access: values
     });
-
-  //res.send(access);
 
   access.save()
   .then(() => {
