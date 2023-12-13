@@ -1,50 +1,97 @@
-import { Component, Input } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { CastLocalService } from './cast-local.service';
+
+import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { CastVoteService } from './cast-local.service';
 import { NgModel } from '@angular/forms';
+import { Results } from '../results/results.model';
+import { Form, Questions } from './form.model';
+import { concatWith } from 'rxjs/operators';
+import { Observable, empty } from 'rxjs';
+import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
-  selector: 'app-cast-local',
+  selector: 'app-cast-vote',
   templateUrl: './cast-local.component.html',
   styleUrls: ['./cast-local.component.css']
 })
 export class CastLocalComponent {
-  @Input() formData: any; // Replace 'any' with your actual data model interface
-  
-  title: string='';
-  description: string='';
-  question: string='';
-  choices: string[] = ['Choice 1', 'Choice 2', 'Choice 3']; // Add your choices here
-  choice: string = '';
 
+  form: Form = {} as Form; // Assuming Form is an interface or class
+  questions: Questions = {} as Questions; // Assuming Questions is an interface or class
+  choices: string[] = []; // Initializing choices as an empty array
+  isDataAvailable: number = 0;
 
-  constructor(private router: Router, private voteService: CastLocalService) {}
+  resetFields() {
+    //this.form = {} as Form;
+    //this.questions = {} as Questions;
+    this.choices = [];
+    //this.isDataAvailable = 2;
+  }
+  constructor(
+    private voteService: CastVoteService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private location: Location
+    ){
+
+    }
 
   ngOnInit(): void {
-    this.voteService.getVoteDetails().subscribe((data) => {
-      this.title = data.title;
-      this.description = data.description;
-      this.question = data.question;
+    const id = this.route.snapshot.paramMap.get('id');
+
+    this.voteService.getForm(id).subscribe((formData) => {
+      this.form = formData.form;
+      
+      if(this.voteEnded() == -1 || this.form.State == 2){ this.endLocalVote();return;}// Voting time has passed or the vote is already over
+
+      if(this.form.State == 0){ return; }// Form is not in the 'ready to be voted on state' display nothing
+
+      this.isDataAvailable += 1;
     });
+
+    this.voteService.getFormQuestions(id).subscribe((qData) => {
+      this.questions = qData.questions;
+      console.log(this.questions);
+      this.choices = new Array(this.questions.Questions.length);
+      
+      this.isDataAvailable += 1;
+    });
+
   }
 
-  chooseAnswer(questionIndex: number, selectedAnswer: string) {
-    // Handle the logic for choosing an answer (e.g., update a response model)
-    // You may want to emit an event to notify the parent component about the selected answer
-  }
+  submitResponse(submission: any){
+    const transformedAnswers = this.choices.map(item => [item]);
+    let response: Object = {
+      response_id: this.form.Responses_ID,
+      Responses: {
+        Parent_Form_ID: this.form._id,
+        Answers: transformedAnswers
+      }};
 
-  navigateToCastLocal(){
-
-    // Replace this with actual credential validation
-    console.log('Submitted title:', this.choice);
+    if(this.voteEnded() == -1){ this.endLocalVote();return;}
     
-    this.router.navigate(['/cast-local']);
+    //add response to database
+    this.voteService.addResponse(response).subscribe();
+
+    //reset form field answers due to local voting
+    this.choices = [];
   }
 
-  navigateToHomePage() {
+  endLocalVote(){
 
-    this.router.navigate(['']);
+    this.voteService.endVote(this.form._id);// Set form State to 2    
+    const url = '../results/' + this.form._id
+    this.router.navigate([url]);
+  }
+
+  voteEnded()
+  {
+    // Check to see if current time is past the end time of the form | must convert Time_Close to a Date to use .getTime() and compare
+    const currentTime: Date = new Date();
+    const formTimeClose: Date = this.form.Time_Close instanceof Date ? this.form.Time_Close : new Date(this.form.Time_Close);
+    if(currentTime.getTime() > formTimeClose.getTime()) { return -1;} // Past Time_Close
+    return 0;// Before Time_Close
   }
 
 }

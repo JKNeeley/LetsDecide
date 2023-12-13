@@ -1,3 +1,4 @@
+<!-- create-voting-form.component.html -->
 <main class="form-page">
     <div>
         <h1>What are you voting on?</h1>
@@ -55,10 +56,10 @@
           <br>
           <div>
               <h2>Step 2: Start voting!</h2>
-              <button class="button" (click)="onFormCreation(formSubmission.value)">Start</button>
+              <button class="button" (click)="onFormCreation(formSubmission.value)">Create Form</button>
           </div>
           <div>
-            <app-vote-form-id-popup *ngIf="showVoteFormIdPopup"></app-vote-form-id-popup>
+            <app-vote-form-id-popup *ngIf="showVoteFormIdPopup" [form]="form_id"></app-vote-form-id-popup>
           </div>
       </form>
   </div>
