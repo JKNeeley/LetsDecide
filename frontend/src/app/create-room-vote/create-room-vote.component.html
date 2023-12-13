@@ -23,21 +23,26 @@
                     <input type="datetime-local" id="endTime" [(ngModel)]="endTime" name="endTime" required>
                 </div>
                 <br>
+                <div>
+                    <label for="numberOfWinners">Number of Winners:</label>
+                    <br>
+                    <input type="number" id="numberOfWinners" [(ngModel)]="showTop" name="numberOfWinners" required>
+                </div>
+                <br>
                 <div *ngFor="let question of questions; let i = index">
                     <!-- Each question -->
                     <h2>Question {{ i + 1 }}</h2>
                     <div class="form-container">
-                      <!-- Your form inputs for each question -->
                       <div>
                           <label for="title{{ i }}">Title:</label>
                           <input type="text" id="title{{ i }}" [(ngModel)]="question.title" name="title{{ i }}" required>
                       </div>
-                      <!-- Other inputs for description, end time, question text, etc. -->
-                      <!-- Input for comma-separated answers -->
+
                       <div>
                           <label for="answerInput{{ i }}">Answers (separated by commas):</label>
                           <input type="text" id="answerInput{{ i }}" [(ngModel)]="question.answerInput" name="answerInput{{ i }}" required>
                       </div>
+
                       <!-- Display individual answers for each question -->
                       <div *ngIf="question.answers.length > 0">
                           <p>Answers:</p>

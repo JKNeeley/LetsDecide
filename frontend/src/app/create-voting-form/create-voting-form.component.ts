@@ -50,6 +50,7 @@ export class CreateVotingFormComponent {
   form_id?: String;
   title: string = '';
   description: string = '';
+  showTop: any;
   endTime: string = '';
   questions: any[] = []; // Define an empty array for questions
   // rType: 
@@ -148,7 +149,7 @@ parseAnswers(question: Question) {
         Parent_Form_ID: ID,
         Description: title,
         Type: 0,
-        Show_Top: 0,
+        Show_Top: this.showTop,
         Options: options
       };
 

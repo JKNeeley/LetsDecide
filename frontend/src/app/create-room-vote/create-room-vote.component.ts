@@ -46,6 +46,7 @@ export class CreateRoomVoteComponent {
   form: string | undefined;
   form_id?: String;
   title: string = '';
+  showTop: any;
   description: string = '';
   endTime: string = '';
   questions: any[] = []; // Define an empty array for questions
@@ -143,7 +144,7 @@ parseAnswers(question: Question) {
         Parent_Form_ID: ID,
         Description: title,
         Type: 0,
-        Show_Top: 0,
+        Show_Top: this.showTop,
         Options: options
       };
 
