@@ -314,30 +314,6 @@ app.put('/api/forms/:formId/update', async (req, res) => {
   }
 });
 
-app.put('/api/forms/:formId/end-vote', async (req, res) => {
-  const formId = req.params.formId;
-
-  // Update form by id, state State to 2 indicating vote it over
-  try {
-    const updatedForm = await formModel.findByIdAndUpdate(
-      formId,
-      { $set: { State: 2 } },
-      { new: true }
-    );
-
-    if (!updatedForm) {
-      return res.status(404).json({ error: 'Form not found' });
-    }
-
-    // Sends the entire updated form back
-    res.status(200).json({ message: 'Form updated successfully', updatedForm });
-  } catch (error) {
-    console.error('Error updating form:', error);
-    res.status(500).json({ error: 'Failed to update form' });
-  }
-});
-
-
 //Create Questions
 app.post('/api/questions', async (req, res) => {
   try {
