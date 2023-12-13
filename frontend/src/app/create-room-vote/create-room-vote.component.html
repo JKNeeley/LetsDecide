@@ -1,3 +1,4 @@
+<!-- create-voting-form.component.html -->
 <main class="form-page">
     <div>
         <h1>What are you voting on?</h1>
@@ -17,29 +18,46 @@
                 </div>
                 <br>
                 <div>
-                    <label for="voters">Voters:</label>
+                    <label for="endTime">End Time:</label>
                     <br>
-                    <input type="text" id="voters" [(ngModel)]="voters" name="voters" required>
+                    <input type="datetime-local" id="endTime" [(ngModel)]="endTime" name="endTime" required>
                 </div>
                 <br>
-                <div>
-                    <label for="question">Question:</label>
-                    <br>
-                    <input type="text" id="question" [(ngModel)]="question" name="question" required>
-                </div>
-                <br>
-                <div>
-                    <label for="answers">Answers (separate with a comma):</label>
-                    <br>
-                    <input type="text" id="answers" [(ngModel)]="answers" name="answers" required>
-                </div>
-            </div>
-            <br>
-            <br>
-            <div>
-                <h2>Step 2: Start voting!</h2>
-                <button class="button" (click)="onVoteCreation(formSubmission.value)">Start</button>
-            </div>
-            </form>
-    </div>
+                <div *ngFor="let question of questions; let i = index">
+                    <!-- Each question -->
+                    <h2>Question {{ i + 1 }}</h2>
+                    <div class="form-container">
+                      <!-- Your form inputs for each question -->
+                      <div>
+                          <label for="title{{ i }}">Title:</label>
+                          <input type="text" id="title{{ i }}" [(ngModel)]="question.title" name="title{{ i }}" required>
+                      </div>
+                      <!-- Other inputs for description, end time, question text, etc. -->
+                      <!-- Input for comma-separated answers -->
+                      <div>
+                          <label for="answerInput{{ i }}">Answers (separated by commas):</label>
+                          <input type="text" id="answerInput{{ i }}" [(ngModel)]="question.answerInput" name="answerInput{{ i }}" required>
+                      </div>
+                      <!-- Display individual answers for each question -->
+                      <div *ngIf="question.answers.length > 0">
+                          <p>Answers:</p>
+                          <ul>
+                              <li *ngFor="let answer of question.answers">{{ answer }}</li>
+                          </ul>
+                      </div>
+                      <!-- Button to remove the question -->
+                      <button (click)="removeQuestion(i)">Remove Question</button>
+                  </div>
+              </div>
+              <!-- Button to add a new question -->
+              <button (click)="addQuestion()">Add Question</button>
+              <br>
+          </div>
+          <br>
+          <div>
+              <h2>Step 2: Start voting!</h2>
+              <button class="button" (click)="onFormCreation(formSubmission.value)">Start Vote</button>
+          </div>
+      </form>
+  </div>
 </main>

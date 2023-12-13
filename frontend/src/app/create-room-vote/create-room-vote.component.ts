@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { FormService } from './create-room-vote.service'
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
+import { Form } from 'app/cast-vote/form.model';
+import mongoose from 'mongoose';
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 export interface Question {
@@ -40,61 +42,94 @@ interface Response {
 
 
 export class CreateRoomVoteComponent {
+
+  form: string | undefined;
+  form_id?: String;
   title: string = '';
   description: string = '';
-  voters?: number;
-  question: string = '';
-  // qType:
-  answers: string = '';
+  endTime: string = '';
+  questions: any[] = []; // Define an empty array for questions
   // rType: 
 
+addQuestion() {
+  this.questions.push({
+    title: '',
+    description: '',
+    endTime: '',
+    questionText: '',
+    answerInput: '',
+    answers: []
+  });
+}
+
+removeQuestion(index: number) {
+  this.questions.splice(index, 1);
+}
+
+parseAnswers(question: Question) {
+  question.answers = question.answerInput.split(',').map(answer => answer.trim());
+}
+
   showSaveCredentialsPopup = false;
+  showVoteFormIdPopup = false;
 
-  constructor(private router: Router, private formService: FormService) {}
-    
-  navigateToCastVote(iterations: number){
+  constructor(private router: Router, private formService: FormService, private route: ActivatedRoute,) {}
+  
+  //Form
+  onFormCreation(form: any) {
+    console.log(form);
+    let parent_id: string, response_id: string | undefined, question_id: string | undefined;
+  
+    this.formService.saveForm(form).subscribe(
+      async (response) => {
+        parent_id = response.savedFormId;
+        console.log('Form sent successfully:', parent_id);
+        this.form_id = parent_id;
+        try {
+          const savedResponse: any = await this.saveResponses(parent_id);
+          response_id = savedResponse?.savedResponseId?.toString();
+        } catch (error) {
+          console.error('Error while saving responses:', error);
+        }
+  
+        try {
+          const savedQuestion: any = await this.saveQuestions(parent_id, form);
+          question_id = savedQuestion?.savedQuestionId?.toString();
+        } catch (error){console.error('Error while saving questions:', error);}
+  
+        try {
+          const response_id_validated = response_id ? response_id : '';
+          const question_id_validated = question_id ? question_id : '';
+          await this.formService.updateFormWithIDs(parent_id!, response_id_validated, question_id_validated).toPromise();
 
-    console.log('Submitted title:', this.title);
-    console.log('Submitted description:', this.description);
-    console.log('Submitted voters:', this.voters);
-    console.log('Submitted question:', this.question);
-    console.log('Submitted answers:', this.answers);
+          // Goto the cast-local page and prefill the form id
+          this.router.navigate(['../cast-local/' + parent_id]);
+        }
+        catch (error) {console.error('Error while updating form:', error);}
+      
+        
+      
+      },
+      (error) => {
+        console.error('Error while saving form:', error);
+      }
 
-    this.router.navigate(['/cast-local']);
-  }
-
-  parseAnswers(question: Question) {
-    question.answers = question.answerInput.split(',').map(answer => answer.trim());
+    );
   }
   
-    
-  //Vote
-  onVoteCreation(form: any) {
-  console.log(form);
-  let parent_id, response_id, question_id;
-  this.formService.saveForm(form).subscribe(
-    (response) => {
-      parent_id = response.savedFormId;
-      console.log('Vote sent successfully:', parent_id);
-      this.saveResponses(parent_id);
-      this.saveQuestions(parent_id, form);
-    }); 
-  }
-
-  //Response
-  saveResponses(ID: string){
-    let response_id = -1;
-    return this.formService.saveResponses(ID).subscribe(
-    (response) => {
-      response_id = response.savedResponse;
-      console.log('Response sent successfully:', response_id);
+  
+  async saveResponses(ID: String): Promise<string> {
+    try {
+      const response = await this.formService.saveResponses(ID).toPromise();
+      return await response;
+    } catch (error) {
+      // Handle errors here if needed
+      console.error('Error while saving responses:', error);
+      throw error;
     }
-  );
   }
 
-
-   saveQuestions(ID: string, form: any){
-    let question_id = -1;
+  async saveQuestions(ID: string, form: any): Promise<string>{
     const questions: QuestionStore = {
       Questions: []
     };
@@ -115,19 +150,16 @@ export class CreateRoomVoteComponent {
       questions.Questions.push(question);
       questionNumber++;
     }
-    this.formService.saveQuestions(questions).subscribe(
-      (response) => {
-        question_id = response?.savedResponse?._id;
-        //console.log("Q: ", response);
-        console.log(question_id);
-      },
-      (error: any) => {
-        console.error('Error sending response:', error);
-      }
-    );
-    return question_id;
-   } 
-
+    try {
+      const response = await this.formService.saveQuestions(questions).toPromise();
+      return await response;
+    } catch (error) {
+      console.error('Error while saving questions:', error);
+      throw error;
+    }
+    
+  } 
+  
   //this.navigateToHomePage();
   navigateToHomePage() {
     this.router.navigate(['/']);

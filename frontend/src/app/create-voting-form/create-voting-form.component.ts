@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { FormService } from './create-voting-form.service'
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { Form } from 'app/cast-vote/form.model';
 import mongoose from 'mongoose';
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 
@@ -76,7 +76,7 @@ parseAnswers(question: Question) {
   showSaveCredentialsPopup = false;
   showVoteFormIdPopup = false;
 
-  constructor(private router: Router, private formService: FormService) {}
+  constructor(private router: Router, private formService: FormService, private route: ActivatedRoute,) {}
   
   //Form
   onFormCreation(form: any) {

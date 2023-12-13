@@ -130,7 +130,7 @@ assign Results.Question[forEach]
 // Returns the results of a form of a specific ID
 // WIP, only supports First-Past-The-Post
 app.get('/api/forms/result/:id', (req, res)=>{
-  console.log('/api/forms/result/:id')
+  //console.log('/api/forms/result/:id')
   formModel.findById(req.params.id).then(form=>{ //find form
     if (form == null){ res.status(204).send('No form document with this ID located').end() }
     //check if form is closed
