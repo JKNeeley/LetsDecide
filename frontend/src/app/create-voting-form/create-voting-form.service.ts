@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import mongoose from 'mongoose';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class FormService {
     return this.http.post<any>('http://localhost:3000/api/forms', formData);
   }
 
-  saveResponses(ID: string): Observable<any> {
+  saveResponses(ID: String): Observable<any> {
     const rsp = { Parent_Form_ID: ID, Responses: [] };
     return this.http.post<any>('http://localhost:3000/api/responses', rsp);
   }
@@ -22,7 +23,7 @@ export class FormService {
     return this.http.post<any>('http://localhost:3000/api/questions', questions);
   }
 
-  updateFormWithIDs(formId: string, responseId: string, questionId: string): Observable<any> {
+  updateFormWithIDs(formId: String, responseId: string, questionId: string): Observable<any> {
     const body = {
       responseId: responseId,
       questionId: questionId

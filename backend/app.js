@@ -331,11 +331,9 @@ app.post('/api/questions', async (req, res) => {
   }
 });
 
-
-
-
-
 app.post('/api/responses', async (req, res) => {
+  // Calls this post request when first creating a form
+  // Creates new Response object to store responses and links to parent form
   try {
     // Make new Response object with the parent_form_id given
     const newResponse = new responseModel();
@@ -349,7 +347,6 @@ app.post('/api/responses', async (req, res) => {
     res.status(500).send('Error saving responses');
   }
 });
-
 
 app.post('/api/addResponse', async (req, res) => {
   //console.log('add resp');
@@ -367,13 +364,13 @@ app.post('/api/addResponse', async (req, res) => {
     foundObject.Responses.push(Responses);
     const updatedObject = await foundObject.save();
 
-    //console.log('Updated object:', updatedObject);
     res.status(200).json({ updatedObject });
   } catch (error) {
     console.error('Error while saving:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
 
 app.put('/api/forms/end-vote', async (req, res) => {
   const formId = req.body.formId;
@@ -391,9 +388,6 @@ app.put('/api/forms/end-vote', async (req, res) => {
   }
 });
 
-
-
-
 // Not in use currently
 app.post('/api/access', (req, res) => {
   const accessData = req.body.access[0];
@@ -407,11 +401,13 @@ app.post('/api/access', (req, res) => {
       Voted: accessData.Voted
   }
 
+  // Store values above with corressponding accessModel
   let access = new accessModel(
     {
       Access: values
     });
 
+  // Store values in database
   access.save()
   .then(() => {
     res.send('Data saved')
