@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CastLocalComponent } from './cast-local.component';
 
-describe('CastLocalComponent', () => {
+describe('CastVoteComponent', () => {
   let component: CastLocalComponent;
   let fixture: ComponentFixture<CastLocalComponent>;
 
