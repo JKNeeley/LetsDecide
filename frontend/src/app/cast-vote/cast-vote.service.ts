@@ -26,4 +26,11 @@ export class CastVoteService {
     return this.http.post<any>(this.backend_url + 'api/addResponse', response);
   }
 
+  endVote(formId: any): Observable<any> {
+    //console.log('Got the id: ',id);
+    const url  = this.backend_url + 'api/forms/end-vote'
+    //console.log('URL: ', url);
+    return this.http.put<any>(url, {formId})
+  }
+
 }
