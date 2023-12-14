@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { FormService } from './create-voting-form.service'
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import { Form } from 'app/cast-vote/form.model';
+import { Form } from '../cast-vote/form.model';
 import mongoose from 'mongoose';
 
 
@@ -52,7 +52,7 @@ export class CreateVotingFormComponent {
   description: string = '';
   endTime: string = '';
   questions: any[] = []; // Define an empty array for questions
-  // rType: 
+  // rType:
 
 addQuestion() {
   this.questions.push({
@@ -77,12 +77,12 @@ parseAnswers(question: Question) {
   showVoteFormIdPopup = false;
 
   constructor(private router: Router, private formService: FormService) {}
-  
+
   //Form
   onFormCreation(form: any) {
     console.log(form);
     let parent_id: String, response_id: string | undefined, question_id: string | undefined;
-  
+
     this.formService.saveForm(form).subscribe(
       async (response) => {
         parent_id = response.savedFormId;
@@ -94,23 +94,23 @@ parseAnswers(question: Question) {
         } catch (error) {
           console.error('Error while saving responses:', error);
         }
-  
+
         try {
           const savedQuestion: any = await this.saveQuestions(parent_id, form);
           question_id = savedQuestion?.savedQuestionId?.toString();
         } catch (error){console.error('Error while saving questions:', error);}
-  
+
         try {
           const response_id_validated = response_id ? response_id : '';
           const question_id_validated = question_id ? question_id : '';
           await this.formService.updateFormWithIDs(parent_id!, response_id_validated, question_id_validated).toPromise();
           console.log('Form updated with IDs:', parent_id, response_id, question_id);
-          
+
         }
         catch (error) {console.error('Error while updating form:', error);}
-      
-        
-      
+
+
+
       },
       (error) => {
         console.error('Error while saving form:', error);
@@ -122,8 +122,8 @@ parseAnswers(question: Question) {
     //this.form = parent_id;
     this.showVoteFormIdPopup = true;
   }
-  
-  
+
+
   async saveResponses(ID: String): Promise<string> {
     try {
       const response = await this.formService.saveResponses(ID).toPromise();
@@ -162,9 +162,9 @@ parseAnswers(question: Question) {
       console.error('Error while saving questions:', error);
       throw error;
     }
-    
-  } 
-  
+
+  }
+
   //this.navigateToHomePage();
   navigateToHomePage() {
     this.router.navigate(['/']);
@@ -172,7 +172,7 @@ parseAnswers(question: Question) {
 
 }
 
-  
- 
+
+
 
 

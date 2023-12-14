@@ -37,16 +37,13 @@ export class CastVoteComponent {
       console.log(this.form.Description);
       this.isDataAvailable += 1;
 
-      const timeClose = new Date(this.form.Time_Close);
-      const currTime = new Date();
-      console.log(timeClose.getTime());
-      console.log(currTime.getTime());
-      if (timeClose.getTime() <= currTime.getTime() || this.form.State == 2){
-        //add post req to close ballot
-        console.log('too late');
-        this.router.navigate(['/results/' + this.form._id]);
-      }
-      else { console.log('ur good');}
+      if(this.voteEnded() == -1 || this.form.State == 2){
+        this.voteService.endVote(this.form._id);// Set form State to 2
+        const url = '../results/' + this.form._id
+        this.router.navigate([url])
+      }// Voting time has passed or the vote is already over
+
+      if(this.form.State == 0){ return; }// Form is not in the 'ready to be voted on state' display nothing
     });
 
     this.voteService.getFormQuestions(id).subscribe((qData) => {
@@ -73,5 +70,14 @@ export class CastVoteComponent {
     //console.log(response);
     //add response to database
     this.voteService.addResponse(response).subscribe();
+  }
+
+  voteEnded()
+  {
+    // Check to see if current time is past the end time of the form | must convert Time_Close to a Date to use .getTime() and compare
+    const currentTime: Date = new Date();
+    const formTimeClose: Date = this.form.Time_Close instanceof Date ? this.form.Time_Close : new Date(this.form.Time_Close);
+    if(currentTime.getTime() > formTimeClose.getTime()) { return -1;} // Past Time_Close
+    return 0;// Before Time_Close
   }
 }
