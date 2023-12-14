@@ -1,5 +1,6 @@
 <div class="results-container" *ngIf="isDataAvailable">
   <h1 class="results-title">{{ results.title }}</h1>
+  <p>Conrats on a successful voting session!</p>
   <div class="piechart-container">
     <div *ngFor="let question of results.questions; index as qnum" class="question-container">
       <div class="question-box">
