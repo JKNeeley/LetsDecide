@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { FormService } from './create-room-vote.service'
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import { Form } from 'app/cast-vote/form.model';
+import { Form } from '../cast-vote/form.model';
 import mongoose from 'mongoose';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -50,7 +50,7 @@ export class CreateRoomVoteComponent {
   description: string = '';
   endTime: string = '';
   questions: any[] = []; // Define an empty array for questions
-  // rType: 
+  // rType:
 
 addQuestion() {
   this.questions.push({
@@ -75,12 +75,12 @@ parseAnswers(question: Question) {
   showVoteFormIdPopup = false;
 
   constructor(private router: Router, private formService: FormService, private route: ActivatedRoute,) {}
-  
+
   //Form
   onFormCreation(form: any) {
     console.log(form);
     let parent_id: string, response_id: string | undefined, question_id: string | undefined;
-    
+
     // Auto set end time to 1 hour from now
     let auto_end_time = new Date();
     auto_end_time.setHours(auto_end_time.getHours()+1);
@@ -98,12 +98,12 @@ parseAnswers(question: Question) {
         } catch (error) {
           console.error('Error while saving responses:', error);
         }
-  
+
         try {
           const savedQuestion: any = await this.saveQuestions(parent_id, form);
           question_id = savedQuestion?.savedQuestionId?.toString();
         } catch (error){console.error('Error while saving questions:', error);}
-  
+
         try {
           const response_id_validated = response_id ? response_id : '';
           const question_id_validated = question_id ? question_id : '';
@@ -113,9 +113,9 @@ parseAnswers(question: Question) {
           this.router.navigate(['../cast-local/' + parent_id]);
         }
         catch (error) {console.error('Error while updating form:', error);}
-      
-        
-      
+
+
+
       },
       (error) => {
         console.error('Error while saving form:', error);
@@ -123,8 +123,8 @@ parseAnswers(question: Question) {
 
     );
   }
-  
-  
+
+
   async saveResponses(ID: String): Promise<string> {
     try {
       const response = await this.formService.saveResponses(ID).toPromise();
@@ -164,9 +164,9 @@ parseAnswers(question: Question) {
       console.error('Error while saving questions:', error);
       throw error;
     }
-    
-  } 
-  
+
+  }
+
   //this.navigateToHomePage();
   navigateToHomePage() {
     this.router.navigate(['/']);
