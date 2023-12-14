@@ -60,6 +60,7 @@ app.get('/api/forms',(req,res)=>{
 
 // Returns form of a specific object ID
 app.get('/api/forms/:id', (req, res)=>{
+  if(!mongoose.Types.ObjectId.isValid(req.params.id)){res.status(14);return;}// Checking if valid object_id
   formModel.findById(req.params.id).then(documents=>{
     if (documents == null){
       res.status(204).send('No document with this ID located')
@@ -78,6 +79,7 @@ app.get('/api/forms/:id', (req, res)=>{
 // Get Questions by ID
 app.get('/api/questions/:id', (req, res)=>{
   //console.log(req.params.id)
+  if(!mongoose.Types.ObjectId.isValid(req.params.id)){res.status(14);return;}// Checking if valid object_id
   questionModel.findById(req.params.id).then(documents=>{
     if (documents == null){
       res.status(204).send('No document with this ID located')
@@ -96,6 +98,7 @@ app.get('/api/questions/:id', (req, res)=>{
 
 //Get Questions by form ID
 app.get('/api/form/questions/:id', (req, res)=>{
+  if(!mongoose.Types.ObjectId.isValid(req.params.id)){res.status(14);return;}// Checking if valid object_id
   formModel.findById(req.params.id).then(form =>{
     questionModel.findById(form.Questions_ID).then(questions=>{
       if (questions == null){
@@ -131,6 +134,7 @@ assign Results.Question[forEach]
 // WIP, only supports First-Past-The-Post
 app.get('/api/forms/result/:id', (req, res)=>{
   //console.log('/api/forms/result/:id')
+  if(!mongoose.Types.ObjectId.isValid(req.params.id)){res.status(14);return;}// Checking if valid object_id
   formModel.findById(req.params.id).then(form=>{ //find form
     if (form == null){ res.status(204).send('No form document with this ID located').end() }
     //check if form is closed
