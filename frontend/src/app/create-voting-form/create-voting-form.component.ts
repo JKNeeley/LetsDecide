@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { FormService } from './create-voting-form.service'
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { Form } from 'app/cast-vote/form.model';
 import mongoose from 'mongoose';
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 
@@ -50,6 +50,7 @@ export class CreateVotingFormComponent {
   form_id?: String;
   title: string = '';
   description: string = '';
+  showTop: any;
   endTime: string = '';
   questions: any[] = []; // Define an empty array for questions
   // rType: 
@@ -76,7 +77,7 @@ parseAnswers(question: Question) {
   showSaveCredentialsPopup = false;
   showVoteFormIdPopup = false;
 
-  constructor(private router: Router, private formService: FormService) {}
+  constructor(private router: Router, private formService: FormService, private route: ActivatedRoute,) {}
   
   //Form
   onFormCreation(form: any) {
@@ -148,7 +149,7 @@ parseAnswers(question: Question) {
         Parent_Form_ID: ID,
         Description: title,
         Type: 0,
-        Show_Top: 0,
+        Show_Top: this.showTop,
         Options: options
       };
 

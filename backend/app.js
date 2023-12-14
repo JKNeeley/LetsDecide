@@ -60,6 +60,7 @@ app.get('/api/forms',(req,res)=>{
 
 // Returns form of a specific object ID
 app.get('/api/forms/:id', (req, res)=>{
+  if(!mongoose.Types.ObjectId.isValid(req.params.id)){res.status(14);return;}// Checking if valid object_id
   formModel.findById(req.params.id).then(documents=>{
     if (documents == null){
       res.status(204).send('No document with this ID located')
@@ -78,6 +79,7 @@ app.get('/api/forms/:id', (req, res)=>{
 // Get Questions by ID
 app.get('/api/questions/:id', (req, res)=>{
   //console.log(req.params.id)
+  if(!mongoose.Types.ObjectId.isValid(req.params.id)){res.status(14);return;}// Checking if valid object_id
   questionModel.findById(req.params.id).then(documents=>{
     if (documents == null){
       res.status(204).send('No document with this ID located')
@@ -96,6 +98,7 @@ app.get('/api/questions/:id', (req, res)=>{
 
 //Get Questions by form ID
 app.get('/api/form/questions/:id', (req, res)=>{
+  if(!mongoose.Types.ObjectId.isValid(req.params.id)){res.status(14);return;}// Checking if valid object_id
   formModel.findById(req.params.id).then(form =>{
     questionModel.findById(form.Questions_ID).then(questions=>{
       if (questions == null){
@@ -130,7 +133,8 @@ assign Results.Question[forEach]
 // Returns the results of a form of a specific ID
 // WIP, only supports First-Past-The-Post
 app.get('/api/forms/result/:id', (req, res)=>{
-  console.log('/api/forms/result/:id')
+  //console.log('/api/forms/result/:id')
+  if(!mongoose.Types.ObjectId.isValid(req.params.id)){res.status(14);return;}// Checking if valid object_id
   formModel.findById(req.params.id).then(form=>{ //find form
     if (form == null){ res.status(204).send('No form document with this ID located').end() }
     //check if form is closed
@@ -313,30 +317,6 @@ app.put('/api/forms/:formId/update', async (req, res) => {
     res.status(500).json({ error: 'Failed to update form' });
   }
 });
-
-app.put('/api/forms/:formId/end-vote', async (req, res) => {
-  const formId = req.params.formId;
-
-  // Update form by id, state State to 2 indicating vote it over
-  try {
-    const updatedForm = await formModel.findByIdAndUpdate(
-      formId,
-      { $set: { State: 2 } },
-      { new: true }
-    );
-
-    if (!updatedForm) {
-      return res.status(404).json({ error: 'Form not found' });
-    }
-
-    // Sends the entire updated form back
-    res.status(200).json({ message: 'Form updated successfully', updatedForm });
-  } catch (error) {
-    console.error('Error updating form:', error);
-    res.status(500).json({ error: 'Failed to update form' });
-  }
-});
-
 
 //Create Questions
 app.post('/api/questions', async (req, res) => {

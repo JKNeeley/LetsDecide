@@ -23,6 +23,12 @@
                     <input type="datetime-local" id="endTime" [(ngModel)]="endTime" name="endTime" required>
                 </div>
                 <br>
+                <div>
+                    <label for="numberOfWinners">Number of Winners:</label>
+                    <br>
+                    <input type="number" id="numberOfWinners" [(ngModel)]="showTop" name="numberOfWinners" required>
+                </div>
+                <br>
                 <div *ngFor="let question of questions; let i = index">
                     <!-- Each question -->
                     <h2>Question {{ i + 1 }}</h2>
