@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { CastVoteService } from '../cast-vote/cast-vote.service';
 import { Form } from '../cast-vote/form.model';
 
@@ -15,9 +15,7 @@ export class VoteFormIdPopupComponent {
   constructor(
     private voteService: CastVoteService,
     private route: ActivatedRoute,
-    ){
-
-    }
+    private router: Router) {}
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
@@ -29,4 +27,8 @@ export class VoteFormIdPopupComponent {
     });
   }
 
-}
+  navigateToHome(){
+    this.router.navigate(['']);
+  }
+
+  }

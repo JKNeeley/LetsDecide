@@ -14,7 +14,7 @@ export class VoteCredentialsPopupComponent {
   constructor(private router: Router) {}
 
   navigateToCastVote(){
-    console.log('Submitted Form ID:', this.code);
-    this.router.navigate(['/cast-vote']);
+    //console.log('Submitted Form ID:', this.code);
+    this.router.navigate(['/cast-vote/'+this.code]);
   }
 }
