@@ -75,6 +75,7 @@ parseAnswers(question: Question) {
 
   showSaveCredentialsPopup = false;
   showVoteFormIdPopup = false;
+  showCreateFormButton = true;
 
   constructor(private router: Router, private formService: FormService) {}
   
@@ -121,6 +122,7 @@ parseAnswers(question: Question) {
     //this.form = form?._id;
     //this.form = parent_id;
     this.showVoteFormIdPopup = true;
+    this.showCreateFormButton = false;
   }
   
   
