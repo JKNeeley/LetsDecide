@@ -60,7 +60,7 @@
               <br>
           </div>
           <br>
-          <div>
+          <div *ngIf="showCreateFormButton">
               <h2>Step 2: Start voting!</h2>
               <button class="button" (click)="onFormCreation(formSubmission.value)">Create Form</button>
           </div>
