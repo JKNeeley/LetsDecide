@@ -17,7 +17,7 @@
       <div>
         <button class="button" (click)="submitResponse(responseSubmission)">Submit Vote</button>
         <br>
-        <button class="button" (click)="endLocalVote()">End Local Vote</button>
+        <button *ngIf = "hasVoted" class="button" (click)="endLocalVote()">End Local Vote</button>
       </div>
     </form>
   </div>

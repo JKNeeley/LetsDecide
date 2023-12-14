@@ -21,6 +21,7 @@ export class CastLocalComponent {
   questions: Questions = {} as Questions; // Assuming Questions is an interface or class
   choices: string[] = []; // Initializing choices as an empty array
   isDataAvailable: number = 0;
+  hasVoted: boolean = false;
 
   resetFields() {
     //this.form = {} as Form;
@@ -62,6 +63,9 @@ export class CastLocalComponent {
 
   submitResponse(submission: any){
     const transformedAnswers = this.choices.map(item => [item]);
+    if(Object.keys(this.choices).length == 0){ return; }
+    this.hasVoted = true;
+
     let response: Object = {
       response_id: this.form.Responses_ID,
       Responses: {

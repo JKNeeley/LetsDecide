@@ -80,7 +80,13 @@ parseAnswers(question: Question) {
   onFormCreation(form: any) {
     console.log(form);
     let parent_id: string, response_id: string | undefined, question_id: string | undefined;
-  
+    
+    // Auto set end time to 1 hour from now
+    let auto_end_time = new Date();
+    auto_end_time.setHours(auto_end_time.getHours()+1);
+    form.endTime = auto_end_time;
+
+
     this.formService.saveForm(form).subscribe(
       async (response) => {
         parent_id = response.savedFormId;
