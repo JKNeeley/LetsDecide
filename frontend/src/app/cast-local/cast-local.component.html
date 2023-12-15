@@ -1,0 +1,24 @@
+<main class="form-page" *ngIf="isDataAvailable == 2">
+  <h1>{{ form.Title }}</h1>
+  <p>{{ form.Description }}</p>
+  <div class="home-page">
+    <form #responseSubmission="ngForm">
+      <div *ngFor="let question of questions.Questions; index as index">
+        <div class="form-container">
+          <p>{{ question.Description }}</p>
+          <label for="choice">Your Choice: </label>
+          <select id="choice{{index}}" [(ngModel)]="choices[index]" name="choice" required>
+            <option *ngFor="let option of question.Options" [value]="option">{{ option }}</option>
+          </select>
+        </div>
+      </div>
+      <br>
+      <br>
+      <div>
+        <button class="button" (click)="submitResponse(responseSubmission)">Submit Vote</button>
+        <br>
+        <button *ngIf = "hasVoted" class="button" (click)="endLocalVote()">End Local Vote</button>
+      </div>
+    </form>
+  </div>
+</main>

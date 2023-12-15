@@ -1,0 +1,20 @@
+<div class="results-container" *ngIf="isDataAvailable">
+  <h1 class="results-title">{{ results.title }}</h1>
+  <p>Conrats on a successful voting session!</p>
+  <div class="piechart-container">
+    <div *ngFor="let question of results.questions; index as qnum" class="question-container">
+      <div class="question-box">
+        <h2 class="question-description">{{ question.description }}</h2>
+        <div class="piechart-box">
+          <app-piechart [question]="question" [qnum]="qnum" class="piechart"></app-piechart>
+        </div>
+        <div class="winners">
+          <p>Winners:</p>
+          <ul>
+            <li *ngFor="let winner of question.winners[0]">{{ winner }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

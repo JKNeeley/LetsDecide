@@ -1,0 +1,58 @@
+/* styles.css or styles.scss */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.form-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh; /* Adjusted to full viewport height */
+    text-align: center;
+    flex-direction: column; /* Align content vertically */
+}
+
+.home-page {
+    text-align: center;
+    max-width: 600px;
+    margin: 20px auto; /* Added margin */
+    padding: 20px;
+}
+
+h1 {
+    font-size: 36px;
+    margin-top: 0; /* Set top margin to 0 */
+    margin-bottom: 10px;
+    font-family: Arial, sans-serif;
+}
+
+p {
+    font-size: 18px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.form-container {
+    padding: 20px;
+    font-size: 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 20px;
+    background-color: #e15a00cd;
+    color: #fff;
+    max-width: 400px;
+    margin: 10px auto; /* Center the form and add spacing */
+}
+
+.button {
+    padding: 10px 20px;
+    font-size: 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    background-color: #e15a00cd;
+    color: #fff;
+}

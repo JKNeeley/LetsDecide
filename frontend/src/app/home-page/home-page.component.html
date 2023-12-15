@@ -1,0 +1,24 @@
+  <main class="home-page">
+    <div class="center-content">
+      <h1>Have a successful voting session!</h1>
+      <p>Welcome to "Let's Decide" where you can create a vote or poll for any occasion.</p>
+      <div>
+        <p>Choose the button that fits your goals below, fill out the respective form, and submit!</p>
+        <div>
+          <p>Need to create ballots to have voters fill out on their own devices?</p>
+          <button class="button" (click)="navigateToCreateVotingForm()">Create Voting Form</button>
+        </div>
+        <br>
+        <div>
+          <p>Need to create ballots for all voters to cast on a single device? </p>
+          <button class="button" (click)="navigateToCreateLocalVote()">Create Local Vote</button>
+        </div>
+      </div>
+      <div>
+        <p>Given a code for a ballot you need to fill out? Curious about your voting results?</p>
+        <p>Enter your form's code here to be redirected accordingly.</p>
+        <button  class="button" (click)="showVoteCredentialsPopup = true">Cast Vote</button>
+        <app-vote-credentials-popup *ngIf="showVoteCredentialsPopup"></app-vote-credentials-popup>
+      </div>
+    </div>
+  </main>
